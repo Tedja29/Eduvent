@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Page + Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 30px;
+        }
+        
+        .review-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .star-rating span {
+            font-size: 24px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .star-rating span.selected {
+            color: #ffc107;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: #25b15e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        /* Chat button */
+        
+        .chat-floating {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ee4d2d;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+        
+        .chat-badge {
+            background: white;
+            color: red;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 3px 7px;
+            border-radius: 50%;
+        }
+        /* Chat popup */
+        
+        .chat-box {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+        }
+        
+        .chat-header {
+            background: #ee4d2d;
+            color: white;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .chat-body {
+            padding: 16px;
+        }
+        
+        .chat-box.show {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="review-form">
+        <h2>Write a Review</h2>
+        <form id="reviewForm">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label>Rating</label>
+                <div class="star-rating" id="starRating">
+                    <span data-value="1">&#9733;</span>
+                    <span data-value="2">&#9733;</span>
+                    <span data-value="3">&#9733;</span>
+                    <span data-value="4">&#9733;</span>
+                    <span data-value="5">&#9733;</span>
+                </div>
+                <input type="hidden" id="rating" value="0">
+            </div>
+            <div class="form-group">
+                <label for="review">Your Review</label>
+                <textarea id="review" rows="4" required></textarea>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Chat Button -->
+    <div id="chat-button" class="chat-floating">
+        <i class="fa-regular fa-message"></i> Chat
+        <span class="chat-badge">40</span>
+    </div>
+
+    <!-- Chat Popup -->
+    <div id="chat-box" class="chat-box">
+        <div class="chat-header">
+            <span>Chat</span>
+            <button id="close-chat" style="background:none;border:none;color:white;font-size:18px;cursor:pointer;">&times;</button>
+        </div>
+        <div class="chat-body">
+            <p>Welcome to Chat! 👋</p>
+            <p>Start responding to your users now.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Rating
+            const stars = document.querySelectorAll('#starRating span');
+            const ratingInput = document.getElementById('rating');
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    ratingInput.value = index + 1;
+                    stars.forEach((s, i) => {
+                        s.classList.toggle('selected', i <= index);
+                    });
+                });
+            });
+
+            // Submit
+            const form = document.getElementById('reviewForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your review, ' + document.getElementById('name').value + '!');
+                form.reset();
+                stars.forEach(s => s.classList.remove('selected'));
+                ratingInput.value = 0;
+            });
+
+            // Chat popup
+            const chatBtn = document.getElementById("chat-button");
+            const chatBox = document.getElementById("chat-box");
+            const closeChat = document.getElementById("close-chat");
+
+            chatBtn.addEventListener("click", () => {
+                chatBox.classList.toggle("show");
+            });
+
+            closeChat.addEventListener("click", () => {
+                chatBox.classList.remove("show");
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title> Feedback </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        /* Form field */
+        
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fafafa;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2b8a3e;
+            background-color: #fff;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(43, 138, 62, 0.1);
+        }
+        /* Button */
+        
+        input[type="submit"] {
+            background-color: #2574a1;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #1b5c83;
+        }
+        /* Responsive fix */
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- header section starts  -->
+
+    <header class="header">
+
+        <div class="header-1">
+
+            <a href="#" class="logo"> <i class="fas fa-book"></i> EduVent </a>
+
+            <form action="" class="search-form">
+                <input type="search" name="" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
+
+            <div class="icons">
+                <div id="search-btn" class="fas fa-search"></div>
+                <a href="cart.html" class="fas fa-shopping-cart"></a>
+                <div id="login-btn" class="fas fa-user"></div>
+            </div>
+
+        </div>
+
+        <div class="header-2">
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="book main page.html">Book Store</a>
+                <a href="Eventpage Main.html">Event</a>
+                <a href="Review1.html">Review</a>
+                <a href="feedback.html">Feedback</a>
+            </nav>
+        </div>
+
+    </header>
+
+    <!-- header section ends -->
+
+    <!-- bottom navbar  -->
+
+    <nav class="bottom-navbar">
+        <a href="#home" class="fas fa-home"></a>
+        <a href="#featured" class="fas fa-list"></a>
+        <a href="#arrivals" class="fas fa-tags"></a>
+        <a href="#reviews" class="fas fa-comments"></a>
+        <a href="#feedback" class="fas fa-feedback"></a>
+    </nav>
+
+
+
+    <div class="container">
+        <form>
+            <div class="form-row">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" placeholder="Your Name...">
+            </div>
+
+            <div class="form-row">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" placeholder="Your Last Name...">
+            </div>
+
+            <div class="form-row">
+                <label for="email">Mail ID</label>
+                <input type="email" id="email" placeholder="Your Email...">
+            </div>
+
+            <div class="form-row">
+                <label for="province">Province</label>
+
+                <select id="province">
+                        <option>Aceh</option>
+                        <option>Sumatera Utara</option>
+                        <option>Sumatera Barat</option>
+                        <option>Riau</option>
+                        <option>Kepulauan Riau</option>
+                        <option>Jambi</option>
+                        <option>Bengkulu</option>
+                        <option>Sumatera Selatan</option>
+                        <option>Bangka Belitung</option>
+                        <option>Lampung</option>
+                        <option>DKI Jakarta</option>
+                        <option>Banten</option>
+                        <option>Jawa Barat</option>
+                        <option>Jawa Tengah</option>
+                        <option>DI Yogyakarta</option>
+                        <option>Jawa Timur</option>
+                        <option>Bali</option>
+                        <option>Nusa Tenggara Barat</option>
+                        <option>Nusa Tenggara Timur</option>
+                        <option>Kalimantan Barat</option>
+                        <option>Kalimantan Tengah</option>
+                        <option>Kalimantan Selatan</option>
+                        <option>Kalimantan Timur</option>
+                        <option>Kalimantan Utara</option>
+                        <option>Sulawesi Utara</option>
+                        <option>Sulawesi Tengah</option>
+                        <option>Sulawesi Selatan</option>
+                        <option>Sulawesi Tenggara</option>
+                        <option>Gorontalo</option>
+                        <option>Sulawesi Barat</option>
+                        <option>Maluku</option>
+                        <option>Maluku Utara</option>
+                        <option>Papua Barat</option>
+                        <option>Papua</option>
+                        <option>Papua Tengah</option>
+                        <option>Papua Pegunungan</option>
+                        <option>Papua Selatan</option>
+                        <option>Papua Barat Daya</option>
+
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="feedback">Feedback</label>
+                <textarea id="feedback" rows="5" placeholder="Write something..."></textarea>
+            </div>
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+
+    <!-- footer section starts  -->
+
+    <section class="footer">
+
+        <div class="box-container">
+
+            <div class="box">
+                <h3>our locations</h3>
+                <a href="#"> <i class="fas fa-map-marker-alt"></i> india </a>
+                <a href="#"> <i class="fas fa-map-marker-alt"></i> USA </a>
+            </div>
+
+            <div class="box">
+                <h3>quick links</h3>
+                <a href="./index.html"> <i class="fas fa-arrow-right"></i> home </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> featured </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> Category </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> reviews </a>
+                <a href="./feedback.html"> <i class="fas fa-arrow-right"></i> feedback </a>
+            </div>
+
+            <div class="box">
+                <h3>extra links</h3>
+                <a href="#"> <i class="fas fa-arrow-right"></i> account info </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> ordered items </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> privacy policy </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> payment method </a>
+                <a href="#"> <i class="fas fa-arrow-right"></i> our serivces </a>
+            </div>
+
+            <div class="box">
+                <h3>contact info</h3>
+                <a href="#"> <i class="fas fa-phone"></i> 91670 XXXXX </a>
+                <a href="#"> <i class="fas fa-phone"></i> 77388 XXXXX </a>
+                <a href="#"> <i class="fas fa-envelope"></i> kordepriyanka1118@gmail.com </a>
+                <a href="#"> <i class="fas fa-envelope"></i> rohitmishra.rm2106@gmail.com </a>
+                <img src="image/worldmap.png" class="map" alt="">
+            </div>
+
+        </div>
+
+        <div class="share">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="https://twitter.com/priyankakorde" class="fab fa-twitter"></a>
+            <a href="https://www.instagram.com/rifk.wardhana/" class="fab fa-instagram" target="_blank" style="font-size: 24px; color: #E4405F; text-decoration: none;"></a>
+            <a href="https://www.linkedin.com/in/priyanka-korde-2029521a1/" class="fab fa-linkedin"></a>
+            <a href="https://www.linkedin.com/in/rohit-m-3494521a2/" class="fab fa-linkedin"></a>
+        </div>
+
+        <div class="credit"> created by <span>Priyanka Korde & Rohit Mishra </span>copyright &copy;2022 all rights reserved! </div>
+
+    </section>
+
+    <!-- footer section ends -->
+
+
+    <script src="./js/script.js"></script>
+</body>
+
+</html>

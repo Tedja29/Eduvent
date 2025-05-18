@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Upcoming Events</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: #2ecc71;
+            margin-right: 5px;
+        }
+        
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-form input[type="search"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            width: 250px;
+        }
+        
+        .search-form label {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .icons {
+            display: flex;
+            gap: 15px;
+            font-size: 18px;
+        }
+        
+        .header-2 {
+            background-color: #27ae60;
+            padding: 10px 0;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .event-section {
+            padding: 50px 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title span {
+            color: #358828;
+        }
+        
+        .event-filter {
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            border: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        
+        .filter-btn.active {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            /* 5 items per row */
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .event-card {
+            position: relative;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform: scale(1);
+            cursor: pointer;
+            z-index: 1;
+        }
+        
+        .event-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 24px rgba(39, 174, 96, 0.35);
+            z-index: 2;
+        }
+        
+        .event-card img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            /* Lebih ringkas agar semua muat */
+            object-fit: cover;
+            display: block;
+        }
+        
+        .event-info {
+            padding: 12px;
+            text-align: left;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+        
+        .badge.business {
+            background-color: #2574a1;
+            color: #fff;
+        }
+        
+        .register-btn {
+            margin-top: 8px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .register-btn:hover {
+            background-color: #219150;
+        }
+        /* Hapus .book-card agar tidak span 2 */
+        
+        .book-card img {
+            aspect-ratio: 3 / 4;
+        }
+        
+        @media (max-width: 1024px) {
+            .event-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .event-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-1">
+            <a href="#" class="logo"><i class="fas fa-book"></i> EduVent</a>
+
+            <form action="" class="search-form">
+                <input type="search" name="" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
+
+            <div class="icons">
+                <a href="cart.html" class="fas fa-shopping-cart"></a>
+                <a href="#" class="fas fa-user"></a>
+            </div>
+        </div>
+
+        <div class="header-2">
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="book main page.html">Book Store</a>
+                <a href="Eventpage Main.html">Event</a>
+                <a href="Review1.html">Review</a>
+                <a href="feedback.html">Feedback</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="event-section">
+        <div class="event-grid">
+            <!-- Book Promotion -->
+            <div class="event-card book-card">
+                <img src="image/book-1.png" alt="Engineering Drawing Book">
+                <div class="event-info">
+                    <span class="badge business">Education</span>
+                    <h3>Engineering Drawing – Prof. N. D. Bhatt</h3>
+
+                    <p>
+                        🎓 <em>Direkomendasikan oleh dosen dan praktisi teknik di seluruh Indonesia!</em>
+                    </p>
+                    <p>
+                        Buku <strong>Engineering Drawing</strong> karya Prof. N. D. Bhatt adalah buku wajib bagi mahasiswa teknik, terutama untuk mata kuliah Gambar Teknik di Semester 3 jurusan Teknik Komputer.
+                    </p>
+                    <p>
+                        📐 <strong>Deskripsi Singkat:</strong><br> Disusun oleh pakar gambar teknik, buku ini menyajikan konsep dasar hingga lanjutan dengan ilustrasi yang jelas dan mudah dipahami. Materi meliputi teknik gambar 2D dan 3D, proyeksi ortografis,
+                        isometrik, dan standar teknik internasional.
+                    </p>
+                    <a href="product.html" class="register-btn">Check Book</a>
+                </div>
+            </div>
+
+
+            <!-- Event 2 -->
+            <div class="event-card book-card">
+
+                <img src="image/book-2.png" alt="Event Poster">
+                <div class="event-info">
+                    <span class="badge business">Engineering</span>
+                    <h3>ENGINEERING MECHANICS</h3>
+                    <p><strong>✍️ Karya:</strong> M.D. Dayel<br> 📅 Edisi ke-14, Tahun 2019</p>
+
+                    <p>🔩 <strong>Deskripsi Buku:</strong><br> Buku referensi klasik ini digunakan oleh ribuan mahasiswa teknik di seluruh dunia. Edisi terbaru hadir dengan pendekatan visual yang menarik, soal-soal praktis, serta penjabaran sistematis mulai
+                        dari dasar hingga lanjutan dalam mekanika teknik.</p>
+
+                    <p>🛠️ <strong>Apa yang Membuat Buku Ini Spesial?</strong></p>
+                    <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+                        <li>✅ Penjelasan sistematis konsep Statika & Dinamika</li>
+                        <li>✅ Ilustrasi menarik dengan visualisasi sepeda</li>
+                        <li>✅ Cocok untuk mahasiswa teknik mesin, sipil, dan elektro</li>
+                        <li>✅ Disertai solusi lengkap dari edisi *Solutions Engineering Mechanics 2019*</li>
+                        <li>✅ Ideal untuk persiapan ujian & proyek praktikum</li>
+                    </ul>
+
+                    <p>📚 <strong>Materi yang Dicakup:</strong><br> Keseimbangan Gaya, Hukum Newton, Struktur Balok & Rangka, Gerak Rotasi & Translasi, Impuls & Momentum, Pusat Massa, Momen Inersia, dan lainnya.</p>
+
+                    <a href="product2.html" class="register-btn">Check Book</a>
+                </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="event-card book-card">
+
+                <img src="image/book-3.png" alt="Event Poster">
+                <div class="event-info">
+                    <span class="badge business">Physics</span>
+                    <h3>APPLIED PHYSICS-I</h3>
+                    <p><strong>Subject Code:</strong> FEC102<br> 📍 <em>Sesuai Kurikulum Terbaru Universitas Mumbai</em></p>
+
+                    <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini dirancang khusus untuk mahasiswa tahun pertama teknik, menyajikan konsep dasar fisika terapan secara sistematis, aplikatif, dan mudah dipahami. Setiap bab dilengkapi dengan teori dunia
+                        nyata, latihan soal, serta ilustrasi mendalam.</p>
+
+                    <p>📚 <strong>Keunggulan:</strong></p>
+                    <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+                        <li>✔️ Sesuai silabus terbaru (University of Mumbai)</li>
+                        <li>✔️ Bahasa mudah dipahami untuk pemula</li>
+                        <li>✔️ Contoh soal dan latihan lengkap</li>
+                        <li>✔️ Ilustrasi penuh warna untuk visualisasi konsep</li>
+                        <li>✔️ Cocok untuk persiapan ujian & praktikum</li>
+                    </ul>
+
+                    <p>💡 <strong>Materi mencakup:</strong><br> Interferensi & Difraksi, Optik, Gelombang, Teori Relativitas, Struktur Kristal, Superkonduktivitas, dan lainnya.</p>
+
+                    <a href="product2.html" class="register-btn">Check Book</a>
+                </div>
+            </div>
+
+            <!-- Event 4 -->
+            <div class="event-card book-card">
+
+                <img src="image/book-4.png" alt="Engineering Drawing Book">
+                <div class="event-info">
+                    <span class="badge business">Engineering</span>
+                    <h3>Engineering Drawing by N.D. Bhatt</h3>
+                    <p>Plane and Solid Geometry - 5th Edition</p>
+                    <p>
+                        📚 Mencari Buku Gambar Teknik?<br> Dapatkan buku Engineering Drawing karya Prof. N.D. Bhatt, edisi terbaru, yang menyediakan panduan lengkap untuk mempelajari Plane and Solid Geometry. Buku ini cocok untuk mahasiswa teknik yang
+                        ingin menguasai teknik gambar 2D dan 3D, serta memahami konsep dasar hingga lanjutan dalam menggambar teknik.
+                    </p>
+                    <p>
+                        🔹 Kenapa Memilih Buku Ini?<br> ✔️ Mudah dipahami dengan ilustrasi yang jelas<br> ✔️ Materi komprehensif tentang geometri datar dan ruang<br> ✔️ Termasuk CD-Rom dengan modul interaktif dan tutorial audiovisual<br> ✔️ Reputasi penulis
+                        ternama dalam bidang teknik
+                    </p>
+                    <a href="product4.html" class="register-btn">Check Book</a>
+                </div>
+
+            </div>
+
+            <!-- Event 5 -->
+            <div class="event-card book-card">
+                <img src="image/book-5.png" alt="Engineering mathematics-ii">
+                <div class="event-info">
+                    <span class="badge business">Food</span>
+                    <h3>Gourmet World Expo</h3>
+                    <p>August 14, 2021 · Paris</p>
+                    <a href="product5.html" class="register-btn">Register</a>
+                </div>
+            </div>
+
+            <!-- Event 6 -->
+            <div class="event-card book-card">
+                <img src="image/book5.png" alt="Structured programming approach">
+                <div class="event-info">
+                    <span class="badge business">Startup</span>
+                    <h3>Future Founders Summit</h3>
+                    <p>September 5, 2021 · San Francisco</p>
+                    <a href="product6.html" class="register-btn">Register</a>
+                </div>
+            </div>
+
+            <!-- Event 7 -->
+            <div class="event-card book-card">
+                <img src="image/book-7.png" alt="Software Engineering. Roger S.Pressman">
+                <div class="event-info">
+                    <span class="badge business">Music</span>
+                    <h3>Global Music Summit</h3>
+                    <p>December 5, 2022 · New York</p>
+                    <a href="product7.html" class="register-btn">Register</a>
+                </div>
+            </div>
+
+            <!-- Event 8 -->
+            <div class="event-card book-card">
+                <img src="image/book-8.png" alt="Database System Concepts">
+                <div class="event-info">
+                    <span class="badge business">Sports</span>
+                    <h3>International Sports Cup</h3>
+                    <p>January 15, 2023 · London</p>
+                    <a href="product8.html" class="register-btn">Register</a>
+                </div>
+            </div>
+
+            <!-- Event 9 -->
+            <div class="event-card book-card">
+                <img src="image/book-9.png" alt="Cryptography and Network security ">
+                <div class="event-info">
+                    <span class="badge business">Technology</span>
+                    <h3>Tech Innovators Meetup</h3>
+                    <p>February 10, 2023 · Berlin</p>
+                    <a href="product9.html" class="register-btn">Register</a>
+                </div>
+            </div>
+
+            <!-- Event 10 -->
+            <div class="event-card book-card">
+                <img src="image/book-10.png" alt="Mobile Communication">
+                <div class="event-info">
+                    <span class="badge business">Art</span>
+                    <h3>Art Gallery Grand Opening</h3>
+                    <p>March 30, 2023 · Los Angeles</p>
+                    <a href="product10.html" class="register-btn">Register</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

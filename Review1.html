@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eduvent - Reviews</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/Review1.css" />
+</head>
+
+<body>
+
+    <!-- Navbar & Header -->
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="hai/image/EduVent.png" alt="Eduvent Logo" class="logo-img" />
+                <span>Eduvent</span>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="search here..." />
+                <button>🔍</button>
+            </div>
+            <div class="icons">
+                <a href="#">🛒</a>
+                <a href="#">👤</a>
+            </div>
+        </div>
+
+        <nav class="navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="book main page.html">Book Store</a></li>
+                <li><a href="Eventpage Main.html">Event</a></li>
+                <li><a href="#" class="active">Reviews</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Chat Button -->
+    <div id="chat-button" class="chat-floating">
+        <i class="fa-regular fa-message"></i> Chat
+        <span class="chat-badge">40</span>
+    </div>
+
+    <!-- Chat Popup -->
+    <div id="chat-box" class="chat-box hidden">
+        <div class="chat-header">
+            <strong>Chat</strong>
+            <button id="close-chat">&times;</button>
+        </div>
+        <div class="chat-content">
+            <div class="chat-sidebar">
+                <input type="text" placeholder="Search name" class="chat-search" />
+                <ul class="chat-list">
+                    <li><strong>fokus.ai</strong><br><span>825231</span></li>
+                    <li><strong>premium_b...</strong><br><span>submit 20x perhari ya</span></li>
+                    <li><strong>rmi.shop</strong><br><span>Terimakasih sudah or...</span></li>
+                    <li><strong>Bluefoxworld</strong><br><span>lebih besar xsmax</span></li>
+                </ul>
+            </div>
+            <div class="chat-main">
+                <div class="chat-welcome">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968520.png" width="80" alt="Laptop Icon" />
+                    <h4>Welcome to Shopee Chat</h4>
+                    <p>Start responding to your buyers now!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Customer Reviews</h1>
+            <p>See what our customers are saying about our books and services</p>
+        </div>
+
+        <!-- Review Summary -->
+        <div class="review-stats">
+            <div class="overall-rating">
+                <div class="rating-number">4.8</div>
+                <div class="rating-stars">★★★★★</div>
+                <div class="rating-text">Based on 1,245 reviews</div>
+            </div>
+            <!-- Breakdown skipped for brevity -->
+        </div>
+
+        <!-- Write Review Form -->
+        <div class="write-review">
+            <h3>Write a Review</h3>
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" placeholder="Enter your name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewContent">Your Review</label>
+                    <textarea id="reviewContent" placeholder="Share your experience..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Rating</label>
+                    <div id="starRating" class="star-rating">
+                        <span class="star" data-value="1">&#9733;</span>
+                        <span class="star" data-value="2">&#9733;</span>
+                        <span class="star" data-value="3">&#9733;</span>
+                        <span class="star" data-value="4">&#9733;</span>
+                        <span class="star" data-value="5">&#9733;</span>
+                    </div>
+                </div>
+
+
+                <input type="hidden" id="rating" value="0" />
+                <button class="submit-btn" type="submit">Submit Review</button>
+            </form>
+        </div>
+
+        <!-- Review Output -->
+        <hr />
+        <div class="review-list" id="reviewList"></div>
+    </div>
+
+    <!-- Script Fix -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chat toggle
+            const chatBtn = document.getElementById("chat-button");
+            const chatBox = document.getElementById("chat-box");
+            const closeChat = document.getElementById("close-chat");
+
+            if (chatBtn && chatBox) {
+                chatBtn.addEventListener("click", () => {
+                    chatBox.classList.toggle("hidden");
+                });
+            }
+
+            if (closeChat && chatBox) {
+                closeChat.addEventListener("click", () => {
+                    chatBox.classList.add("hidden");
+                });
+            }
+
+            // Star rating
+            const stars = document.querySelectorAll("#starRating .star");
+            const ratingInput = document.getElementById("rating");
+
+            stars.forEach((star, index) => {
+                star.addEventListener("click", () => {
+                    ratingInput.value = index + 1;
+                    stars.forEach((s, i) => {
+                        s.style.color = i <= index ? "gold" : "gray";
+                    });
+                });
+            });
+
+            // Submit review
+            const form = document.getElementById("reviewForm");
+            form.addEventListener("submit", function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById("name").value;
+                const rating = ratingInput.value;
+                const review = document.getElementById("reviewContent").value;
+
+                if (rating == 0) {
+                    alert("Please select a rating.");
+                    return;
+                }
+
+                const reviewHTML = `
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">👤</div>
+              <div>
+                <div class="reviewer-name">${name}</div>
+                <div class="review-date">${new Date().toLocaleDateString()}</div>
+              </div>
+            </div>
+            <div class="review-rating">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
+          </div>
+          <div class="review-content">
+            <p>${review}</p>
+          </div>
+        </div>
+      `;
+
+                document.getElementById("reviewList").innerHTML += reviewHTML;
+                form.reset();
+                ratingInput.value = 0;
+                stars.forEach(s => s.style.color = "gray");
+            });
+        });
+    </script>
+</body>
+
+</html>
