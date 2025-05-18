@@ -1,10 +1,28 @@
-// form-handler.js
-import { database } from './firebase-config.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import {
+  getDatabase,
   ref,
-  push,
   set
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+  authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+  databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "peppy-nation-438101-b2",
+  storageBucket: "peppy-nation-438101-b2.appspot.com",
+  messagingSenderId: "1086158601671",
+  appId: "1:1086158601671:web:6d2358e5a628376456ede2"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const auth = getAuth(app);
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector(".needs-validation");
@@ -31,23 +49,29 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const usersRef = ref(database, 'users/');
-    const newUserRef = push(usersRef);
+    // Buat akun auth
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        const uid = user.uid;
 
-    set(newUserRef, {
-      firstName,
-      lastName,
-      email,
-      username,
-      password,  // ⚠️ Waspada: ini plaintext!
-      phone,
-      address
-    }).then(() => {
-      alert("Data berhasil disimpan!");
-      form.reset();
-      form.classList.remove('was-validated');
-    }).catch((error) => {
-      alert("Gagal menyimpan data: " + error.message);
-    });
+        // Simpan data tambahan ke database
+        return set(ref(database, 'users/' + uid), {
+          firstName,
+          lastName,
+          email,
+          username,
+          phone,
+          address
+        });
+      })
+      .then(() => {
+        alert("Registrasi berhasil!");
+        form.reset();
+        form.classList.remove('was-validated');
+      })
+      .catch((error) => {
+        alert("Gagal registrasi: " + error.message);
+      });
   });
 });
