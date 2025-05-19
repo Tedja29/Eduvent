@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Book</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Style for the page (You can add more custom styles here) */
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: #2ecc71;
+            margin-right: 5px;
+        }
+        
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-form input[type="search"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            width: 250px;
+        }
+        
+        .search-form label {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .icons a {
+            color: black;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .header-2 {
+            background-color: #27ae60;
+            padding: 10px 0;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        /* Form Styling */
+        
+        .form-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .submit-btn:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-1">
+            <a href="#" class="logo"><i class="fas fa-book"></i> EduVent</a>
+
+            <form action="" class="search-form">
+                <input type="search" name="" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
+
+            <div class="icons">
+                <a href="cart.html" class="fas fa-shopping-cart"></a>
+                <a href="#" class="fas fa-user"></a>
+                <a href="add-book.html" class="fas fa-plus" title="Add Book"></a>
+            </div>
+        </div>
+
+        <div class="header-2">
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="book main page.html">Book Store</a>
+                <a href="Eventpage Main.html">Event</a>
+                <a href="Review1.html">Review</a>
+                <a href="feedback.html">Feedback</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="form-container">
+        <h2>Add New Book</h2>
+        <form action="submit-book.php" method="POST">
+            <div class="form-group">
+                <label for="book-title">Book Title</label>
+                <input type="text" id="book-title" name="book-title" required>
+            </div>
+            <div class="form-group">
+                <label for="book-author">Author</label>
+                <input type="text" id="book-author" name="book-author" required>
+            </div>
+            <div class="form-group">
+                <label for="book-category">Category</label>
+                <select id="book-category" name="book-category" required>
+                    <option value="education">Education</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="physics">Physics</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="technology">Technology</option>
+                    <!-- Add more categories as needed -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="book-description">Book Description</label>
+                <textarea id="book-description" name="book-description" rows="6" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="book-price">Price (IDR)</label>
+                <input type="number" id="book-price" name="book-price" required min="0" step="1000">
+            </div>
+            <div class="form-group">
+                <label for="book-image">Book Cover Image</label>
+                <input type="file" id="book-image" name="book-image" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="submit-btn">Add Book</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>
