@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Tracking Pesanan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* Header Styles */
+        
+        .header .header-1 {
+            background-color: #fff;
+            padding: 1.5rem 9%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+            position: relative;
+        }
+        
+        .header .header-1 .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #27ae60;
+            text-decoration: none;
+        }
+        
+        .header .header-1 .logo i {
+            color: #27ae60;
+            margin-right: .5rem;
+        }
+        
+        .header .header-1 .search-form {
+            width: 50%;
+            position: relative;
+        }
+        
+        .header .header-1 .search-form.active {
+            display: block;
+        }
+        
+        .header .header-1 .search-form input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0, 0, 0, .1);
+            font-size: 1rem;
+            text-transform: none;
+            border-radius: .5rem;
+        }
+        
+        .header .header-1 .search-form label {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .header .header-1 .icons div,
+        .header .header-1 .icons a {
+            font-size: 1.5rem;
+            margin-left: 1.5rem;
+            color: #333;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .header .header-1 .icons div:hover,
+        .header .header-1 .icons a:hover {
+            color: #27ae60;
+        }
+        
+        .header .header-2 {
+            background-color: #27ae60;
+            padding: 1rem 9%;
+        }
+        
+        .header .header-2 .navbar {
+            text-align: center;
+        }
+        
+        .header .header-2 .navbar a {
+            color: #fff;
+            display: inline-block;
+            padding: .5rem 1.5rem;
+            font-size: 1.2rem;
+            text-decoration: none;
+            text-transform: capitalize;
+        }
+        
+        .header .header-2 .navbar a:hover {
+            background-color: #219653;
+            border-radius: .5rem;
+        }
+        
+        #search-btn {
+            display: none;
+        }
+        
+        header {
+            background-color: #27ae60;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tracking-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tracking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #219653;
+        }
+        
+        .tracking-result {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .tracking-info {
+            margin-bottom: 20px;
+        }
+        
+        .status-container {
+            margin-top: 40px;
+        }
+        
+        .status-title {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .status-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .status-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 8px;
+            height: 100%;
+            width: 2px;
+            background-color: #ddd;
+        }
+        
+        .status-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .status-item.completed .status-marker {
+            background-color: #27ae60;
+        }
+        
+        .status-item.active .status-marker {
+            background-color: #27ae60;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .status-item.pending .status-marker {
+            background-color: #ddd;
+        }
+        
+        .status-marker {
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: #ddd;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #ddd;
+        }
+        
+        .status-content {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ddd;
+        }
+        
+        .status-item.completed .status-content {
+            border-left-color: #27ae60;
+        }
+        
+        .status-item.active .status-content {
+            border-left-color: #27ae60;
+        }
+        
+        .status-date {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .status-text {
+            font-weight: 600;
+        }
+        
+        .status-detail {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .error-message {
+            color: #f44336;
+            display: none;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(39, 174, 96, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            .tracking-container {
+                padding: 20px;
+            }
+            .header-1 {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .header-1 .logo {
+                margin-bottom: 1rem;
+            }
+            .header-1 .search-form {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            .header-2 .navbar {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header-2 .navbar a {
+                margin: 0.2rem;
+            }
+            #search-btn {
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-1">
+            <a href="#" class="logo"> <i class="fas fa-book"></i> EduVent </a>
+            <form action="" class="search-form">
+                <input type="search" name="" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
+            <div class="icons">
+                <div id="search-btn" class="fas fa-search"></div>
+                <a href="./cart.html" class="fas fa-shopping-cart"></a>
+                <div id="login-btn" class="fas fa-user"></div>
+            </div>
+        </div>
+        <div class="header-2">
+            <nav class="navbar">
+                <a href="./index.html">Home</a>
+                <a href="book main page.html">Book Shop</a>
+                <a href="Eventpage Main.html">Event</a>
+                <a href="Review1.html">Review</a>
+                <a href="./feedback.html">feedback</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <header>
+            <h1>Sistem Tracking Pesanan</h1>
+        </header>
+
+        <div class="tracking-container">
+            <div class="tracking-form">
+                <div class="input-group">
+                    <label for="order-number">Nomor Pesanan</label>
+                    <input type="text" id="order-number" placeholder="Masukkan nomor pesanan Anda">
+                    <div class="error-message" id="error-message">Nomor pesanan tidak valid atau tidak ditemukan</div>
+                </div>
+                <button id="track-button">Lacak Pesanan</button>
+            </div>
+
+            <div class="tracking-result" id="tracking-result">
+                <div class="tracking-info">
+                    <h2>Informasi Pesanan: <span id="order-id"></span></h2>
+                    <p><strong>Tanggal Pemesanan:</strong> <span id="order-date"></span></p>
+                    <p><strong>Estimasi Pengiriman:</strong> <span id="delivery-estimate"></span></p>
+                    <p><strong>Alamat Pengiriman:</strong> <span id="shipping-address"></span></p>
+                </div>
+
+                <div class="status-container">
+                    <div class="status-title">Status Pengiriman</div>
+                    <div class="status-timeline" id="status-timeline">
+                        <!-- Status items will be added here via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Contoh data pesanan (di dunia nyata ini akan berasal dari database/API)
+        const orders = {
+            "ORD123456": {
+                id: "ORD123456",
+                orderDate: "19 Mei 2025",
+                deliveryEstimate: "24 Mei 2025",
+                shippingAddress: "Jl. Merdeka No. 123, Jakarta Selatan, DKI Jakarta",
+                status: [{
+                    date: "19 Mei 2025, 10:30",
+                    text: "Pesanan Diterima",
+                    detail: "Pesanan Anda telah diterima dan sedang diproses.",
+                    status: "completed"
+                }, {
+                    date: "20 Mei 2025, 14:15",
+                    text: "Pesanan Dikemas",
+                    detail: "Pesanan Anda sedang dikemas dan disiapkan untuk pengiriman.",
+                    status: "completed"
+                }, {
+                    date: "21 Mei 2025, 09:45",
+                    text: "Dalam Pengiriman",
+                    detail: "Pesanan Anda telah dikirim dan sedang dalam perjalanan.",
+                    status: "active"
+                }, {
+                    date: "Estimasi 24 Mei 2025",
+                    text: "Pesanan Tiba",
+                    detail: "Pesanan Anda telah sampai di tujuan.",
+                    status: "pending"
+                }]
+            },
+            "ORD789012": {
+                id: "ORD789012",
+                orderDate: "15 Mei 2025",
+                deliveryEstimate: "22 Mei 2025",
+                shippingAddress: "Jl. Diponegoro No. 45, Bandung, Jawa Barat",
+                status: [{
+                    date: "15 Mei 2025, 09:20",
+                    text: "Pesanan Diterima",
+                    detail: "Pesanan Anda telah diterima dan sedang diproses.",
+                    status: "completed"
+                }, {
+                    date: "16 Mei 2025, 13:10",
+                    text: "Pesanan Dikemas",
+                    detail: "Pesanan Anda sedang dikemas dan disiapkan untuk pengiriman.",
+                    status: "completed"
+                }, {
+                    date: "17 Mei 2025, 08:30",
+                    text: "Dalam Pengiriman",
+                    detail: "Pesanan Anda telah dikirim dan sedang dalam perjalanan.",
+                    status: "completed"
+                }, {
+                    date: "21 Mei 2025, 11:15",
+                    text: "Pesanan Tiba",
+                    detail: "Pesanan Anda telah sampai di tujuan.",
+                    status: "active"
+                }]
+            }
+        };
+
+        // Menangani tombol Lacak Pesanan
+        document.getElementById('track-button').addEventListener('click', function() {
+            trackOrder();
+        });
+
+        // Menangani ketika pengguna menekan Enter di input
+        document.getElementById('order-number').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                trackOrder();
+            }
+        });
+
+        function trackOrder() {
+            const orderNumber = document.getElementById('order-number').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            const trackingResult = document.getElementById('tracking-result');
+
+            // Reset tampilan
+            errorMessage.style.display = 'none';
+            trackingResult.style.display = 'none';
+
+            // Cek apakah nomor pesanan valid
+            if (orderNumber && orders[orderNumber]) {
+                // Pesanan ditemukan
+                displayOrderDetails(orders[orderNumber]);
+                trackingResult.style.display = 'block';
+            } else {
+                // Pesanan tidak ditemukan
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        function displayOrderDetails(order) {
+            // Menampilkan informasi pesanan
+            document.getElementById('order-id').textContent = order.id;
+            document.getElementById('order-date').textContent = order.orderDate;
+            document.getElementById('delivery-estimate').textContent = order.deliveryEstimate;
+            document.getElementById('shipping-address').textContent = order.shippingAddress;
+
+            // Menampilkan status pengiriman
+            const statusTimeline = document.getElementById('status-timeline');
+            statusTimeline.innerHTML = ''; // Menghapus status sebelumnya
+
+            // Menambahkan setiap item status
+            order.status.forEach(statusItem => {
+                const statusHTML = `
+                    <div class="status-item ${statusItem.status}">
+                        <div class="status-marker"></div>
+                        <div class="status-content">
+                            <div class="status-date">${statusItem.date}</div>
+                            <div class="status-text">${statusItem.text}</div>
+                            <div class="status-detail">${statusItem.detail}</div>
+                        </div>
+                    </div>
+                `;
+                statusTimeline.innerHTML += statusHTML;
+            });
+        }
+
+        // Toggle search form on mobile
+        document.getElementById('search-btn').addEventListener('click', function() {
+            document.querySelector('.header-1 .search-form').classList.toggle('active');
+        });
+    </script>
+</body>
+
+</html>
