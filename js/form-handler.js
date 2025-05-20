@@ -49,6 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const role = document.querySelector('input[name="role"]:checked')?.value;
+    if (!role) {
+      alert("Silakan pilih peran Anda: Penjual atau Pembeli.");
+      return;
+    }
+
+
     // Buat akun auth
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -62,7 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
           email,
           username,
           phone,
-          address
+          address,
+          role
         });
       })
       .then(() => {
