@@ -97,43 +97,6 @@
 
 </div>
 
-<script>
-  // Simulasi database user
-  const usersDB = [
-    { email: 'user@example.com', password: 'password123' },
-    { email: 'admin@example.com', password: 'adminpass' }
-  ];
-
-  const loginForm = document.getElementById('loginForm');
-  const errorMsg = document.getElementById('error-msg');
-
-  loginForm.addEventListener('submit', function(e) {
-    e.preventDefault(); // agar tidak reload halaman
-
-    const emailInput = loginForm.email.value.trim();
-    const passwordInput = loginForm.password.value;
-
-    // cek apakah user ada di "database"
-    const user = usersDB.find(u => u.email === emailInput && u.password === passwordInput);
-
-    if (user) {
-      // login berhasil
-      errorMsg.style.display = 'none';
-
-      // Simulasi menyimpan sesi login (bisa juga pakai localStorage/sessionStorage)
-      sessionStorage.setItem('loggedInUser', emailInput);
-
-      // redirect ke halaman dashboard
-      window.location.href = 'refined-dashboard (1).html';
-    } else {
-      // login gagal
-      errorMsg.style.display = 'block';
-      errorMsg.textContent = 'Email atau password salah. Silakan coba lagi.';
-    }
-  });
-</script>
-
-
     <!-- home section starts  -->
 
     <section class="home" id="home">
@@ -775,11 +738,18 @@
                 const snapshot = await get(ref(database, 'users/' + uid));
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
-                    alert("Login berhasil! Selamat datang, " + (userData.fullName || email));
-                    // window.location.href = "homepage.html";
+                    const role = userData.role;
+                    if (role === "penjual") {
+                        window.location.href = "Dashboardpenjual.html";
+                    } else if (role === "pembeli") {
+                        window.location.href = "index.html";
+                    } else {
+                        alert("Role tidak dikenali. Hubungi admin.");
+                    }
                 } else {
                     alert("Data pengguna tidak ditemukan di database.");
                 }
+
             } catch (error) {
                 alert("Login gagal: " + error.message);
             }
