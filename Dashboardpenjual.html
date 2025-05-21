@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Penjual - EduVent</title>
+
+  <!-- Font Awesome & Bootstrap -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+      background-color: #28a745;
+    }
+
+    .navbar .nav-link,
+    .navbar-brand {
+      color: white;
+    }
+
+    .navbar .nav-link:hover {
+      color: #d4ffd4;
+    }
+
+    .dashboard-header {
+      background-color: #28a745;
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h5 {
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      background-color: #28a745;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-book"></i> EduVent</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Beranda</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Tambah Produk</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pesanan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Dashboard Penjual</h1>
+    <p>Selamat datang di area penjual EduVent</p>
+  </div>
+
+  <!-- Konten Dashboard -->
+  <div class="container my-5">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card text-center p-4">
+          <h5>Produk Saya</h5>
+          <p class="text-muted">Lihat dan kelola buku yang kamu jual.</p>
+          <a href="#" class="btn btn-primary">Kelola Produk</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center p-4">
+          <h5>Pesanan Masuk</h5>
+          <p class="text-muted">Lihat pesanan baru dari pembeli.</p>
+          <a href="#" class="btn btn-primary">Lihat Pesanan</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center p-4">
+          <h5>Riwayat Transaksi</h5>
+          <p class="text-muted">Pantau riwayat penjualan kamu.</p>
+          <a href="#" class="btn btn-primary">Lihat Riwayat</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center py-4 bg-light mt-auto">
+    <p class="mb-0">&copy; 2025 EduVent. All rights reserved.</p>
+  </footer>
+</body>
+</html>
