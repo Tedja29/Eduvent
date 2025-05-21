@@ -755,6 +755,31 @@
             }
         });
     </script>
+    
+    <script type="module">
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+  const auth = getAuth();
+  const loginBtn = document.getElementById("login-btn");
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // Jika user sudah login
+      loginBtn.style.cursor = "pointer";
+      loginBtn.title = "Akun Saya";
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "refined-dashboard (1).html";
+      });
+    } else {
+      // Jika user belum login
+      loginBtn.style.cursor = "pointer";
+      loginBtn.title = "Login";
+      loginBtn.addEventListener("click", () => {
+        document.querySelector(".login-form-container").classList.add("active");
+      });
+    }
+  });
+</script>
 </body>
 
 </html>
