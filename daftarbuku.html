@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Upcoming Events</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: #2ecc71;
+            margin-right: 5px;
+        }
+        
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-form input[type="search"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            width: 250px;
+        }
+        
+        .search-form label {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .icons {
+            display: flex;
+            gap: 15px;
+            font-size: 18px;
+        }
+        
+        .header-2 {
+            background-color: #27ae60;
+            padding: 10px 0;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .event-section {
+            padding: 50px 20px;
+            background-color: #fff;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title span {
+            color: #358828;
+        }
+        
+        .event-filter {
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            border: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        
+        .filter-btn.active {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            /* 5 items per row */
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .event-card {
+            position: relative;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform: scale(1);
+            cursor: pointer;
+            z-index: 1;
+        }
+        
+        .event-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 24px rgba(39, 174, 96, 0.35);
+            z-index: 2;
+        }
+        
+        .event-card img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            /* Lebih ringkas agar semua muat */
+            object-fit: cover;
+            display: block;
+        }
+        
+        .event-info {
+            padding: 12px;
+            text-align: left;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+        
+        .badge.business {
+            background-color: #2574a1;
+            color: #fff;
+        }
+        
+        .register-btn {
+            margin-top: 8px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .register-btn:hover {
+            background-color: #219150;
+        }
+        /* Hapus .book-card agar tidak span 2 */
+        
+        .book-card img {
+            aspect-ratio: 3 / 4;
+        }
+        
+        @media (max-width: 1024px) {
+            .event-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .event-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-1">
+            <a href="#" class="logo"><i class="fas fa-book"></i> EduVent</a>
+
+            <form action="" class="search-form">
+                <input type="search" name="" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
+
+            <div class="icons">
+                <a href="cart.html" class="fas fa-shopping-cart"></a>
+                <a href="#" class="fas fa-user"></a>
+            </div>
+        </div>
+
+        <div class="header-2">
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="book main page.html">Book Store</a>
+                <a href="Eventpage Main.html">Event</a>
+                <a href="Review1.html">Review</a>
+                <a href="feedback.html">Feedback</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="event-section">
+      <div style="text-align: right; max-width: 1200px; margin: 0 auto 20px auto;">
+        <a href="addbook.html" class="register-btn" style="background-color: #2ecc71;">
+            <i class="fas fa-plus-circle"></i> Tambah Buku
+        </a>
+    </div>
+        <div class="event-grid">
+            <!-- Book Promotion -->
+            <div class="event-card book-card">
+                <img src="image/book-1.png" alt="Engineering Drawing Book">
+                <div class="event-info">
+                    <span class="badge business">Education</span>
+                    <h3>Engineering Drawing – Prof. N. D. Bhatt</h3>
+
+                    <p>
+                        🎓 <em>Direkomendasikan oleh dosen dan praktisi teknik di seluruh Indonesia!</em>
+                    </p>
+                    <p>
+                        Buku <strong>Engineering Drawing</strong> karya Prof. N. D. Bhatt adalah buku wajib bagi mahasiswa teknik, terutama untuk mata kuliah Gambar Teknik di Semester 3 jurusan Teknik Komputer.
+                    </p>
+                    <p>
+                        📐 <strong>Deskripsi Singkat:</strong><br> Disusun oleh pakar gambar teknik, buku ini menyajikan konsep dasar hingga lanjutan dengan ilustrasi yang jelas dan mudah dipahami. Materi meliputi teknik gambar 2D dan 3D, proyeksi ortografis,
+                        isometrik, dan standar teknik internasional.
+                    </p>
+                    <a href="product.html" class="register-btn">Check Book</a>
+                </div>
+            </div>
+
+
+            <!-- Event 2 -->
+            <div class="event-card book-card">
+
+                <img src="image/book-2.png" alt="Event Poster">
+                <div class="event-info">
+                    <span class="badge business">Engineering</span>
+                    <h3>ENGINEERING MECHANICS</h3>
+                    <p><strong>✍️ Karya:</strong> M.D. Dayel<br> 📅 Edisi ke-14, Tahun 2019</p>
+
+                    <p>🔩 <strong>Deskripsi Buku:</strong><br> Buku referensi klasik ini digunakan oleh ribuan mahasiswa teknik di seluruh dunia. Edisi terbaru hadir dengan pendekatan visual yang menarik, soal-soal praktis, serta penjabaran sistematis mulai
+                        dari dasar hingga lanjutan dalam mekanika teknik.</p>
+
+                    <p>🛠️ <strong>Apa yang Membuat Buku Ini Spesial?</strong></p>
+                    <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+                        <li>✅ Penjelasan sistematis konsep Statika & Dinamika</li>
+                        <li>✅ Ilustrasi menarik dengan visualisasi sepeda</li>
+                        <li>✅ Cocok untuk mahasiswa teknik mesin, sipil, dan elektro</li>
+                        <li>✅ Disertai solusi lengkap dari edisi *Solutions Engineering Mechanics 2019*</li>
+                        <li>✅ Ideal untuk persiapan ujian & proyek praktikum</li>
+                    </ul>
+
+                    <p>📚 <strong>Materi yang Dicakup:</strong><br> Keseimbangan Gaya, Hukum Newton, Struktur Balok & Rangka, Gerak Rotasi & Translasi, Impuls & Momentum, Pusat Massa, Momen Inersia, dan lainnya.</p>
+
+                    <a href="product2.html" class="register-btn">Check Book</a>
+                </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="event-card book-card">
+
+                <img src="image/book-3.png" alt="Event Poster">
+                <div class="event-info">
+                    <span class="badge business">Physics</span>
+                    <h3>APPLIED PHYSICS-I</h3>
+                    <p><strong>Subject Code:</strong> FEC102<br> 📍 <em>Sesuai Kurikulum Terbaru Universitas Mumbai</em></p>
+
+                    <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini dirancang khusus untuk mahasiswa tahun pertama teknik, menyajikan konsep dasar fisika terapan secara sistematis, aplikatif, dan mudah dipahami. Setiap bab dilengkapi dengan teori dunia
+                        nyata, latihan soal, serta ilustrasi mendalam.</p>
+
+                    <p>📚 <strong>Keunggulan:</strong></p>
+                    <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+                        <li>✔️ Sesuai silabus terbaru (University of Mumbai)</li>
+                        <li>✔️ Bahasa mudah dipahami untuk pemula</li>
+                        <li>✔️ Contoh soal dan latihan lengkap</li>
+                        <li>✔️ Ilustrasi penuh warna untuk visualisasi konsep</li>
+                        <li>✔️ Cocok untuk persiapan ujian & praktikum</li>
+                    </ul>
+
+                    <p>💡 <strong>Materi mencakup:</strong><br> Interferensi & Difraksi, Optik, Gelombang, Teori Relativitas, Struktur Kristal, Superkonduktivitas, dan lainnya.</p>
+
+                    <a href="product2.html" class="register-btn">Check Book</a>
+                </div>
+            </div>
+
+            <!-- Event 4 -->
+           <div class="event-card book-card">
+
+                <img src="image/book-4.png" alt="Engineering Drawing Book">
+                <div class="event-info">
+                    <span class="badge business">Engineering</span>
+                    <h3>Engineering Drawing by N.D. Bhatt</h3>
+                    <p>Plane and Solid Geometry - 5th Edition</p>
+                    <p>
+                        📚 Mencari Buku Gambar Teknik?<br> Dapatkan buku Engineering Drawing karya Prof. N.D. Bhatt, edisi terbaru, yang menyediakan panduan lengkap untuk mempelajari Plane and Solid Geometry. Buku ini cocok untuk mahasiswa teknik yang
+                        ingin menguasai teknik gambar 2D dan 3D, serta memahami konsep dasar hingga lanjutan dalam menggambar teknik.
+                    </p>
+                    <p>
+                        🔹 Kenapa Memilih Buku Ini?<br> ✔️ Mudah dipahami dengan ilustrasi yang jelas<br> ✔️ Materi komprehensif tentang geometri datar dan ruang<br> ✔️ Termasuk CD-Rom dengan modul interaktif dan tutorial audiovisual<br> ✔️ Reputasi penulis
+                        ternama dalam bidang teknik
+                    </p>
+                    <a href="product4.html" class="register-btn">Check Book</a>
+                </div>
+
+            </div>
+
+
+            <!-- Event 5 -->
+            <div class="event-card book-card">
+
+    <img src="image/book-5.png" alt="Engineering Mathematics-II Cover">
+    <div class="event-info">
+        <span class="badge business">Mathematics</span>
+        <h3>ENGINEERING MATHEMATICS-II</h3>
+        <p><strong>Subject Code:</strong> FESEM2<br> 📍 <em>Sesuai Kurikulum Terbaru F.E. Semester II</em></p>
+
+        <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini dirancang khusus untuk mahasiswa semester dua jurusan teknik, menyajikan konsep matematika teknik lanjutan dengan penjelasan sistematis dan aplikatif. Setiap bab dilengkapi contoh soal dan metode penyelesaian yang mudah dipahami.</p>
+
+        <p>📚 <strong>Keunggulan:</strong></p>
+        <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+            <li>✔️ Materi lengkap untuk F.E. Semester II</li>
+            <li>✔️ Bahasa yang mudah dipahami</li>
+            <li>✔️ Contoh soal dan latihan komprehensif</li>
+            <li>✔️ Pendekatan aplikatif sesuai kebutuhan teknik</li>
+            <li>✔️ Sumber belajar andalan untuk persiapan ujian</li>
+        </ul>
+
+        <p>💡 <strong>Materi mencakup:</strong><br> Metode Matriks, Diferensial Parsial, Transformasi Laplace, Deret Fourier, dan lain-lain.</p>
+
+        <a href="product-engineering-math-2.html" class="register-btn">Check Book</a>
+    </div>
+</div>
+
+
+            <!-- Event 6 -->
+            <div class="event-card book-card">
+
+    <img src="image/book5.png" alt="Structured Programming Approach Cover">
+    <div class="event-info">
+        <span class="badge business">Computer Science</span>
+        <h3>STRUCTURED PROGRAMMING APPROACH</h3>
+        <p><strong>Subject Code:</strong> FEC-205<br> 📍 <em>Sesuai Kurikulum Terbaru CBCS Mumbai University</em></p>
+
+        <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini dirancang khusus untuk mahasiswa jurusan komputer dan teknik, membahas pendekatan pemrograman terstruktur secara sistematis dan praktis. Setiap bab dilengkapi contoh soal, studi kasus, dan solusi yang sesuai dengan kurikulum Mumbai University.</p>
+
+        <p>📚 <strong>Keunggulan:</strong></p>
+        <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+            <li>✔️ Sesuai silabus terbaru CBCS Mumbai University</li>
+            <li>✔️ Penjelasan konsep pemrograman terstruktur yang jelas</li>
+            <li>✔️ Contoh soal dan solusi praktis</li>
+            <li>✔️ Termasuk soal-soal ujian resmi dari Mumbai University</li>
+            <li>✔️ Referensi ideal untuk persiapan ujian dan tugas</li>
+        </ul>
+
+        <p>💡 <strong>Materi mencakup:</strong><br> Konsep dasar pemrograman, struktur kontrol, fungsi, array, pointer, dan modulasi program.</p>
+
+        <a href="product-structured-programming.html" class="register-btn">Check Book</a>
+    </div>
+</div>
+
+
+            <!-- Event 8 -->
+            <div class="event-card book-card">
+
+    <img src="image/book-7.png" alt="Software Engineering Cover">
+    <div class="event-info">
+        <span class="badge business">Software Engineering</span>
+        <h3>SOFTWARE ENGINEERING</h3>
+        <p><strong>Edition:</strong> Ninth Edition<br> 📍 <em>By Roger S. Pressman & Bruce R. Maxim</em></p>
+
+        <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini menyajikan pendekatan praktis dalam rekayasa perangkat lunak, mencakup metode, proses, dan teknik yang diperlukan untuk membangun perangkat lunak berkualitas tinggi. Cocok untuk mahasiswa, praktisi, dan pengembang perangkat lunak.</p>
+
+        <p>📚 <strong>Keunggulan:</strong></p>
+        <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+            <li>✔️ Pendekatan praktis dan aplikatif</li>
+            <li>✔️ Materi lengkap tentang proses rekayasa perangkat lunak</li>
+            <li>✔️ Studi kasus dan contoh nyata industri</li>
+            <li>✔️ Penjelasan sistematis dan mudah dipahami</li>
+            <li>✔️ Referensi utama untuk pengembangan software profesional</li>
+        </ul>
+
+        <p>💡 <strong>Materi mencakup:</strong><br> Software process, Agile methods, Requirement engineering, Design, Testing, Maintenance, dan lainnya.</p>
+
+        <a href="product-software-engineering-9.html" class="register-btn">Check Book</a>
+    </div>
+</div>
+
+
+            <!-- Event 9 -->
+            <div class="event-card book-card">
+
+    <img src="image/book-8.png" alt="Database System Concepts Cover">
+    <div class="event-info">
+        <span class="badge business">Database</span>
+        <h3>DATABASE SYSTEM CONCEPTS</h3>
+        <p><strong>Edition:</strong> Sixth Edition<br> 📍 <em>Classic Reference for Database Fundamentals</em></p>
+
+        <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini menyajikan konsep dasar dan lanjutan sistem basis data dengan pendekatan teoritis dan praktis. Cocok untuk mahasiswa dan profesional yang ingin memahami arsitektur, desain, serta implementasi database secara mendalam.</p>
+
+        <p>📚 <strong>Keunggulan:</strong></p>
+        <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+            <li>✔️ Materi lengkap dan komprehensif</li>
+            <li>✔️ Dilengkapi contoh kasus dan studi nyata</li>
+            <li>✔️ Penjelasan konsep dasar hingga advanced</li>
+            <li>✔️ Cocok untuk mahasiswa, dosen, dan praktisi IT</li>
+            <li>✔️ Referensi utama di bidang database</li>
+        </ul>
+
+        <p>💡 <strong>Materi mencakup:</strong><br> Data Models, Relational Databases, SQL, Query Processing, Transaction Management, Database Design, dan lainnya.</p>
+
+        <a href="product-database-system-concepts.html" class="register-btn">Check Book</a>
+    </div>
+</div>
+
+
+            <!-- Event 10 -->
+         <div class="event-card book-card">
+
+    <img src="image/book-10.png" alt="Mobile Communications Cover">  
+    <div class="event-info">
+        <span class="badge business">Telecommunications</span>
+        <h3>Mobile Communications</h3>
+        <p><strong>Author:</strong> Jochen Schiller<br> 📍 <em>Second Edition, Pearson</em></p>
+
+        <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini menyajikan konsep dasar dan lanjutan tentang komunikasi seluler, mulai dari teknologi jaringan hingga protokol komunikasi, yang cocok untuk mahasiswa dan praktisi di bidang telekomunikasi dan jaringan.</p>
+
+        <p>📚 <strong>Keunggulan:</strong></p>
+        <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+            <li>✔️ Materi lengkap dan terbaru tentang komunikasi seluler</li>
+            <li>✔️ Penjelasan konsep dengan bahasa yang mudah dipahami</li>
+            <li>✔️ Pembahasan teknologi GSM, UMTS, LTE, dan 5G</li>
+            <li>✔️ Contoh kasus dan aplikasi nyata</li>
+            <li>✔️ Referensi terpercaya dari penerbit Pearson</li>
+        </ul>
+
+        <p>💡 <strong>Materi mencakup:</strong><br> Arsitektur jaringan seluler, protokol lapisan, handover, keamanan, dan teknologi generasi terbaru.</p>
+
+        <a href="product-mobile-communications.html" class="register-btn">Check Book</a>
+    </div>
+</div>
+
+
+            <!-- Event 11 -->
+            <div class="event-card book-card">
+
+    <img src="image/book-9.png" alt="Cryptography and Network Security Cover">
+    <div class="event-info">
+        <span class="badge business">Computer Science</span>
+        <h3>CRYPTOGRAPHY AND NETWORK SECURITY</h3>
+        <p><strong>Edition:</strong> Seventh Edition<br> 📍 <em>Principles and Practice</em></p>
+
+        <p>🧠 <strong>Deskripsi Buku:</strong><br> Buku ini membahas konsep dasar hingga lanjutan dalam bidang kriptografi dan keamanan jaringan. Disusun oleh William Stallings, buku ini memberikan penjelasan komprehensif yang mudah dipahami dengan pendekatan praktis dan teori yang kuat.</p>
+
+        <p>📚 <strong>Keunggulan:</strong></p>
+        <ul style="text-align: left; padding-left: 20px; font-size: 14px;">
+            <li>✔️ Materi lengkap mencakup teori dan praktik keamanan jaringan</li>
+            <li>✔️ Dilengkapi contoh kasus dan aplikasi nyata</li>
+            <li>✔️ Penjelasan detail tentang algoritma kriptografi dan protokol keamanan</li>
+            <li>✔️ Cocok untuk mahasiswa, praktisi, dan peneliti bidang keamanan TI</li>
+            <li>✔️ Referensi standar yang banyak digunakan di dunia akademik</li>
+        </ul>
+
+        <p>💡 <strong>Materi mencakup:</strong><br> Enkripsi simetris dan asimetris, protokol keamanan jaringan, manajemen kunci, tanda tangan digital, keamanan aplikasi, dan banyak lagi.</p>
+
+        <a href="product-cryptography-network-security.html" class="register-btn">Check Book</a>
+    </div>
+</div>
+
+        
+        </div>
+    </section>
+
+</body>
+
+</html>
