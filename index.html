@@ -75,27 +75,64 @@
 
     <!-- login form  -->
 
-    <div class="login-form-container">
+  <div class="login-form-container">
 
-        <div id="close-login-btn" class="fas fa-times"></div>
+    <div id="close-login-btn" class="fas fa-times"></div>
 
-        <form action="">
-            <h3>sign in</h3>
-            <span>username</span>
-            <input type="email" name="" class="box" placeholder="enter your email" id="">
-            <span>password</span>
-            <input type="password" name="" class="box" placeholder="enter your password" id="">
-            <div class="checkbox">
-                <input type="checkbox" name="" id="remember-me">
-                <label for="remember-me"> remember me</label>
-            </div>
-            <input type="submit" value="sign in" class="btn">
-            <p>forget password ? <a href="#">click here</a></p>
-            <p>Don't have an account? <a href="form-validation.html">Create one</a></p>
+    <form id="loginForm">
+        <h3>sign in</h3>
+        <span>username</span>
+        <input type="email" name="email" class="box" placeholder="enter your email" id="email" required>
+        <span>password</span>
+        <input type="password" name="password" class="box" placeholder="enter your password" id="password" required>
+        <div class="checkbox">
+            <input type="checkbox" name="remember" id="remember-me">
+            <label for="remember-me"> remember me</label>
+        </div>
+        <input type="submit" value="sign in" class="btn">
+        <p id="error-msg" style="color:red; display:none;"></p>
+        <p>forget password ? <a href="#">click here</a></p>
+        <p>Don't have an account? <a href="form-validation.html">Create one</a></p>
+    </form>
 
-        </form>
+</div>
 
-    </div>
+<script>
+  // Simulasi database user
+  const usersDB = [
+    { email: 'user@example.com', password: 'password123' },
+    { email: 'admin@example.com', password: 'adminpass' }
+  ];
+
+  const loginForm = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('error-msg');
+
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault(); // agar tidak reload halaman
+
+    const emailInput = loginForm.email.value.trim();
+    const passwordInput = loginForm.password.value;
+
+    // cek apakah user ada di "database"
+    const user = usersDB.find(u => u.email === emailInput && u.password === passwordInput);
+
+    if (user) {
+      // login berhasil
+      errorMsg.style.display = 'none';
+
+      // Simulasi menyimpan sesi login (bisa juga pakai localStorage/sessionStorage)
+      sessionStorage.setItem('loggedInUser', emailInput);
+
+      // redirect ke halaman dashboard
+      window.location.href = 'refined-dashboard (1).html';
+    } else {
+      // login gagal
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = 'Email atau password salah. Silakan coba lagi.';
+    }
+  });
+</script>
+
 
     <!-- home section starts  -->
 
