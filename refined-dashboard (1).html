@@ -470,6 +470,54 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+  // Konfigurasi Firebase milikmu
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+    authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+    databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "peppy-nation-438101-b2",
+    storageBucket: "peppy-nation-438101-b2.appspot.com",
+    messagingSenderId: "1086158601671",
+    appId: "1:1086158601671:web:6d2358e5a628376456ede2"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  // Saat user login
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const snapshot = await get(ref(db, 'users/' + uid));
+
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+
+        // Tampilkan ke halaman HTML
+        document.getElementById("userName").textContent = `${data.firstName} ${data.lastName}`;
+        document.getElementById("firstName").textContent = data.firstName || "-";
+        document.getElementById("lastName").textContent = data.lastName || "-";
+        document.getElementById("email").textContent = data.email || "-";
+        document.getElementById("username").textContent = data.username || "-";
+        document.getElementById("phone").textContent = data.phone || "-";
+        document.getElementById("address").textContent = data.address || "-";
+      } else {
+        alert("Data pengguna tidak ditemukan.");
+      }
+    } else {
+      // Belum login → redirect ke halaman login
+      window.location.href = "login.html";
+    }
+  });
+</script>
+
 </body>
 
 </html>
