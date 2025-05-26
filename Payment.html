@@ -130,42 +130,28 @@
             <div class="order-summary">
                 <h2>Order Summary</h2>
 
-                <div class="order-items">
-                    <div class="order-item">
-                        <img src="/api/placeholder/60/80" alt="Book 1" />
-                        <div class="item-details">
-                            <h4>Engineering Drawing</h4>
-                            <p>N. D. Bhatt</p>
-                        </div>
-                        <div class="price">₹349</div>
-                    </div>
-
-                    <div class="order-item">
-                        <img src="/api/placeholder/60/80" alt="Book 2" />
-                        <div class="item-details">
-                            <h4>Engineering Mathematics-II</h4>
-                            <p>G.V. Kumbhojkar</p>
-                        </div>
-                        <div class="price">₹299</div>
-                    </div>
+                <div class="order-items" id="orderSummaryItems">
+  <!-- Item dari localStorage akan dimuat di sini -->
                 </div>
-
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <span>₹648</span>
+                    <span id="subtotalAmount">₹0</span>
                 </div>
                 <div class="summary-row">
                     <span>Discount (75% Off)</span>
-                    <span>-₹486</span>
+                    <span id="discountAmount">-₹0</span>
                 </div>
                 <div class="summary-row">
                     <span>Shipping</span>
-                    <span>Free</span>
+                    <span id="shippingAmount">Free</span>
                 </div>
                 <div class="summary-row total">
                     <span>Total</span>
-                    <span>₹162</span>
+                    <span id="totalAmount">₹0</span>
                 </div>
+
+
+
 
                 <button class="btn">Apply Coupon</button>
             </div>
@@ -199,6 +185,47 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+  const container = document.getElementById("orderSummaryItems");
+
+  if (cart.length === 0) {
+    container.innerHTML = "<p>Your cart is empty.</p>";
+    return;
+  }
+
+  let subtotal = 0;
+  cart.forEach((item) => {
+    const itemTotal = item.harga * (item.jumlah || 1);
+    subtotal += itemTotal;
+
+    const itemHTML = `
+      <div class="order-item">
+        <img src="${item.gambar}" alt="${item.nama}" />
+        <div class="item-details">
+          <h4>${item.nama}</h4>
+          <p>${item.penulis}</p>
+        </div>
+        <div class="price">₹${itemTotal}</div>
+      </div>
+    `;
+
+    container.insertAdjacentHTML("beforeend", itemHTML);
+  });
+
+  const discount = subtotal * 0.75; // Diskon 75%
+  const shipping = 0;
+  const total = subtotal - discount + shipping;
+
+  // Tampilkan ke halaman
+  document.getElementById("subtotalAmount").textContent = `₹${subtotal}`;
+  document.getElementById("discountAmount").textContent = `-₹${discount}`;
+  document.getElementById("shippingAmount").textContent = shipping === 0 ? "Free" : `₹${shipping}`;
+  document.getElementById("totalAmount").textContent = `₹${total}`;
+});
+</script>
+
 </body>
 
 </html>
