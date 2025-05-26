@@ -1,234 +1,183 @@
- // Optional JavaScript for enhancing the payment form functionality
- document.addEventListener('DOMContentLoaded', function() {
-     // Handle payment method selection
-     const paymentMethods = document.querySelectorAll('.payment-method');
-     const cardPaymentForm = document.getElementById('card-payment-form');
+// Clean and optimized JavaScript for payment page with Firebase integration
 
-     paymentMethods.forEach(method => {
-         method.addEventListener('click', function() {
-             // Remove active class from all methods
-             paymentMethods.forEach(m => m.classList.remove('active'));
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  set
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-             // Add active class to clicked method
-             this.classList.add('active');
+document.addEventListener("DOMContentLoaded", function () {
+  // =================== Firebase Config ===================
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+    authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+    databaseURL:
+      "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "peppy-nation-438101-b2",
+    storageBucket: "peppy-nation-438101-b2.appspot.com",
+    messagingSenderId: "1086158601671",
+    appId: "1:1086158601671:web:6d2358e5a628376456ede2"
+  };
 
-             // Check the radio button
-             const radio = this.querySelector('input[type="radio"]');
-             radio.checked = true;
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
 
-             // Show/hide card payment form based on selection
-             if (radio.id === 'credit-card') {
-                 cardPaymentForm.style.display = 'block';
-             } else {
-                 cardPaymentForm.style.display = 'none';
-             }
-         });
-     });
+  // =================== Chat Toggle ===================
+  const chatBtn = document.getElementById("chat-button");
+  const chatBox = document.getElementById("chat-box");
+  const closeChat = document.getElementById("close-chat");
 
-     // Form validation for the payment form
-     const paymentForm = document.getElementById('payment-form');
+  if (chatBtn && chatBox && closeChat) {
+    chatBtn.addEventListener("click", () => {
+      chatBox.classList.toggle("hidden");
+    });
 
-     paymentForm.addEventListener('submit', function(e) {
-         e.preventDefault();
+    closeChat.addEventListener("click", () => {
+      chatBox.classList.add("hidden");
+    });
+  }
 
-         // Simple validation check
-         const requiredFields = this.querySelectorAll('[required]');
-         let valid = true;
+  // =================== Star Rating ===================
+  const stars = document.querySelectorAll("#starRating .star");
+  const ratingInput = document.getElementById("rating");
+  let currentRating = 0;
 
-         requiredFields.forEach(field => {
-             if (!field.value.trim()) {
-                 valid = false;
-                 field.style.borderColor = '#ff3860';
-             } else {
-                 field.style.borderColor = '#ddd';
-             }
-         });
+  if (stars.length && ratingInput) {
+    stars.forEach((star, index) => {
+      star.addEventListener("mouseover", () => {
+        stars.forEach((s, i) => {
+          s.classList.toggle("hovered", i <= index);
+        });
+      });
 
-         if (valid) {
-             // Show success message or redirect
-             alert('Payment successful! Thank you for your order.');
-         } else {
-             alert('Please fill in all required fields.');
-         }
-     });
+      star.addEventListener("mouseout", () => {
+        stars.forEach((s, i) => {
+          s.classList.remove("hovered");
+          s.classList.toggle("selected", i < currentRating);
+        });
+      });
 
-     // Format card number with spaces
-     const cardNumberInput = document.getElementById('card-number');
+      star.addEventListener("click", () => {
+        currentRating = index + 1;
+        ratingInput.value = currentRating;
+        stars.forEach((s, i) => {
+          s.classList.toggle("selected", i < currentRating);
+        });
+      });
+    });
+  }
 
-     cardNumberInput.addEventListener('input', function(e) {
-         // Remove non-digits
-         let value = this.value.replace(/\D/g, '');
+  // =================== Payment Method Toggle ===================
+  const paymentMethods = document.querySelectorAll(".payment-method");
+  const cardPaymentForm = document.getElementById("card-payment-form");
 
-         // Add space after every 4 digits
-         if (value.length > 0) {
-             value = value.match(new RegExp('.{1,4}', 'g')).join(' ');
-         }
+  if (paymentMethods.length && cardPaymentForm) {
+    paymentMethods.forEach((method) => {
+      method.addEventListener("click", function () {
+        paymentMethods.forEach((m) => m.classList.remove("active"));
+        this.classList.add("active");
 
-         // Update the input value
-         this.value = value;
-     });
+        const radio = this.querySelector("input[type='radio']");
+        if (radio) radio.checked = true;
 
-     // Format expiry date (MM/YY)
-     const expiryInput = document.getElementById('expiry');
+        cardPaymentForm.style.display =
+          radio && radio.id === "credit-card" ? "block" : "none";
+      });
+    });
+  }
 
-     expiryInput.addEventListener('input', function(e) {
-         let value = this.value.replace(/\D/g, '');
+  // =================== Payment Form Submission ===================
+  const paymentForm = document.getElementById("payment-form");
 
-         if (value.length > 2) {
-             value = value.substring(0, 2) + '/' + value.substring(2, 4);
-         }
+  if (paymentForm) {
+    paymentForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      let valid = true;
+      const requiredFields = this.querySelectorAll("[required]");
 
-         this.value = value;
-     });
- });
- // Star rating interaction
- stars.forEach((star, index) => {
-     star.addEventListener("click", () => {
-         ratingInput.value = index + 1;
-         stars.forEach((s, i) => {
-             s.classList.toggle("selected", i <= index);
-         });
-     });
+      requiredFields.forEach((field) => {
+        if (!field.value.trim()) {
+          valid = false;
+          field.style.borderColor = "#ff3860";
+        } else {
+          field.style.borderColor = "#ddd";
+        }
+      });
 
-     star.addEventListener("mouseover", () => {
-         stars.forEach((s, i) => {
-             s.style.color = i <= index ? "#ffc107" : "#ccc";
-         });
-     });
+      if (!valid) {
+        alert("Please fill in all required fields.");
+        return;
+      }
 
-     star.addEventListener("mouseout", () => {
-         const selectedRating = parseInt(ratingInput.value);
-         stars.forEach((s, i) => {
-             s.style.color = i < selectedRating ? "#ffc107" : "#ccc";
-         });
-     });
- });
- const chatBtn = document.getElementById("chat-button");
- const chatBox = document.getElementById("chat-box");
- const closeChat = document.getElementById("close-chat");
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
 
- chatBtn.addEventListener("click", () => {
-     chatBox.classList.toggle("hidden");
- });
+          const data = {
+            userId: uid,
+            fullName: document.getElementById("fullname").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            address: document.getElementById("address").value,
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            zip: document.getElementById("zip").value,
+            paymentMethod: document.getElementById("payment-method").value,
+            cardName: document.getElementById("card-name").value || null,
+            cardNumber: document.getElementById("card-number").value || null,
+            expiry: document.getElementById("expiry").value || null,
+            cvv: document.getElementById("cvv").value || null,
+            status: "Belum Dibayar",
+            tanggalCheckout: new Date().toISOString()
+          };
 
- closeChat.addEventLisdocument.addEventListener('DOMContentLoaded', function() {
-     // SEMUA KODE DI SINI
+          const checkoutRef = ref(db, "checkout");
+          const newCheckout = push(checkoutRef);
 
-     // Chat toggle
-     const chatBtn = document.getElementById("chat-button");
-     const chatBox = document.getElementById("chat-box");
-     const closeChat = document.getElementById("close-chat");
+          set(newCheckout, data)
+            .then(() => {
+              alert("Checkout berhasil disimpan ke Firebase!");
+              paymentForm.reset();
+            })
+            .catch((err) => {
+              console.error("Gagal menyimpan checkout:", err);
+              alert("Terjadi kesalahan saat menyimpan checkout.");
+            });
+        } else {
+          alert("Silakan login terlebih dahulu.");
+        }
+      });
+    });
+  }
 
-     chatBtn.addEventListener("click", () => {
-         chatBox.classList.toggle("hidden");
-     });
+  // =================== Format Card Number ===================
+  const cardNumberInput = document.getElementById("card-number");
+  if (cardNumberInput) {
+    cardNumberInput.addEventListener("input", function () {
+      let value = this.value.replace(/\D/g, "");
+      if (value.length > 0) {
+        value = value.match(/.{1,4}/g).join(" ");
+      }
+      this.value = value;
+    });
+  }
 
-     closeChat.addEventListener("click", () => {
-         chatBox.classList.add("hidden");
-     });
-
-     // Cek elemen rating jika ada
-     const stars = document.querySelectorAll("#starRating .star");
-     const ratingInput = document.getElementById("rating");
-
-     let currentRating = 0;
-
-     stars.forEach((star, index) => {
-         // Hover effect
-         star.addEventListener("mouseover", () => {
-             stars.forEach((s, i) => {
-                 s.classList.toggle("hovered", i <= index);
-             });
-         });
-
-         // Remove hover on mouseout
-         star.addEventListener("mouseout", () => {
-             stars.forEach((s, i) => {
-                 s.classList.remove("hovered");
-                 s.classList.toggle("selected", i < currentRating);
-             });
-         });
-
-         // Click to set rating
-         star.addEventListener("click", () => {
-             currentRating = index + 1;
-             ratingInput.value = currentRating;
-             stars.forEach((s, i) => {
-                 s.classList.toggle("selected", i < currentRating);
-             });
-         });
-     });
-
-
-     // Payment method toggle
-     const paymentMethods = document.querySelectorAll('.payment-method');
-     const cardPaymentForm = document.getElementById('card-payment-form');
-
-     paymentMethods.forEach(method => {
-         method.addEventListener('click', function() {
-             paymentMethods.forEach(m => m.classList.remove('active'));
-             this.classList.add('active');
-
-             const radio = this.querySelector('input[type="radio"]');
-             radio.checked = true;
-
-             if (radio.id === 'credit-card') {
-                 cardPaymentForm.style.display = 'block';
-             } else {
-                 cardPaymentForm.style.display = 'none';
-             }
-         });
-     });
-
-     // Payment form validation
-     const paymentForm = document.getElementById('payment-form');
-     if (paymentForm) {
-         paymentForm.addEventListener('submit', function(e) {
-             e.preventDefault();
-             let valid = true;
-             const requiredFields = this.querySelectorAll('[required]');
-
-             requiredFields.forEach(field => {
-                 if (!field.value.trim()) {
-                     valid = false;
-                     field.style.borderColor = '#ff3860';
-                 } else {
-                     field.style.borderColor = '#ddd';
-                 }
-             });
-
-             if (valid) {
-                 alert('Payment successful! Thank you for your order.');
-             } else {
-                 alert('Please fill in all required fields.');
-             }
-         });
-     }
-
-     // Format card number
-     const cardNumberInput = document.getElementById('card-number');
-     if (cardNumberInput) {
-         cardNumberInput.addEventListener('input', function() {
-             let value = this.value.replace(/\D/g, '');
-             if (value.length > 0) {
-                 value = value.match(new RegExp('.{1,4}', 'g')).join(' ');
-             }
-             this.value = value;
-         });
-     }
-
-     // Format expiry
-     const expiryInput = document.getElementById('expiry');
-     if (expiryInput) {
-         expiryInput.addEventListener('input', function() {
-             let value = this.value.replace(/\D/g, '');
-             if (value.length > 2) {
-                 value = value.substring(0, 2) + '/' + value.substring(2, 4);
-             }
-             this.value = value;
-         });
-     }
- });
- tener("click", () => {
-     chatBox.classList.add("hidden");
- });
+  // =================== Format Expiry ===================
+  const expiryInput = document.getElementById("expiry");
+  if (expiryInput) {
+    expiryInput.addEventListener("input", function () {
+      let value = this.value.replace(/\D/g, "");
+      if (value.length > 2) {
+        value = value.substring(0, 2) + "/" + value.substring(2, 4);
+      }
+      this.value = value;
+    });
+  }
+});
