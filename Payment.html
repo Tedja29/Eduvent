@@ -197,34 +197,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let subtotal = 0;
   cart.forEach((item) => {
-    const itemTotal = item.harga * (item.jumlah || 1);
-    subtotal += itemTotal;
-      
-      const itemHTML = `
+    const totalItem = item.harga * (item.jumlah || 1);
+    subtotal += totalItem;
+
+    const html = `
       <div class="order-item">
-      <img src="${item.gambar}" alt="${item.nama}" />
-      <div class="item-details">
-      <h4>${item.nama}</h4>
-      <p>${item.penulis}</p>
-      <p>Qty: ${item.jumlah || 1} x ₹${item.harga}</p>
-      <p><strong>Total: ₹${itemTotal}</strong></p>
+        <img src="${item.gambar}" alt="${item.nama}" />
+        <div class="item-details">
+          <h4>${item.nama}</h4>
+          <p>${item.penulis}</p>
+          <p>Qty: ${item.jumlah || 1} x ₹${item.harga}</p>
+          <strong>Total: ₹${totalItem}</strong>
+        </div>
       </div>
-      </div>
-      `;
-
-
-    container.insertAdjacentHTML("beforeend", itemHTML);
+    `;
+    container.insertAdjacentHTML("beforeend", html);
   });
 
-  const discount = subtotal * 0.75; // Diskon 75%
-  const shipping = 0;
-  const total = subtotal - discount + shipping;
+  const discount = subtotal * 0.75;
+  const total = subtotal - discount;
 
-  // Tampilkan ke halaman
-    document.getElementById("subtotalAmount").textContent = `₹${subtotal.toFixed(2)}`;
-    document.getElementById("discountAmount").textContent = `-₹${discount.toFixed(2)}`;
-    document.getElementById("totalAmount").textContent = `₹${total.toFixed(2)}`;
+  document.getElementById("subtotalAmount").textContent = `₹${subtotal.toFixed(2)}`;
+  document.getElementById("discountAmount").textContent = `-₹${discount.toFixed(2)}`;
+  document.getElementById("totalAmount").textContent = `₹${total.toFixed(2)}`;
 });
+
+        paymentForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  // Validasi form dan kirim data ke Firebase...
+
+  // Setelah sukses:
+  localStorage.removeItem("cartItems");
+  alert("Pembayaran berhasil!");
+  window.location.href = "index.html";
+});
+
 </script>
 
 </body>
