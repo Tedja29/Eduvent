@@ -199,17 +199,19 @@ document.addEventListener("DOMContentLoaded", function () {
   cart.forEach((item) => {
     const itemTotal = item.harga * (item.jumlah || 1);
     subtotal += itemTotal;
-
-    const itemHTML = `
+      
+      const itemHTML = `
       <div class="order-item">
-        <img src="${item.gambar}" alt="${item.nama}" />
-        <div class="item-details">
-          <h4>${item.nama}</h4>
-          <p>${item.penulis}</p>
-        </div>
-        <div class="price">₹${itemTotal}</div>
+      <img src="${item.gambar}" alt="${item.nama}" />
+      <div class="item-details">
+      <h4>${item.nama}</h4>
+      <p>${item.penulis}</p>
+      <p>Qty: ${item.jumlah || 1} x ₹${item.harga}</p>
+      <p><strong>Total: ₹${itemTotal}</strong></p>
       </div>
-    `;
+      </div>
+      `;
+
 
     container.insertAdjacentHTML("beforeend", itemHTML);
   });
@@ -219,10 +221,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const total = subtotal - discount + shipping;
 
   // Tampilkan ke halaman
-  document.getElementById("subtotalAmount").textContent = `₹${subtotal}`;
-  document.getElementById("discountAmount").textContent = `-₹${discount}`;
-  document.getElementById("shippingAmount").textContent = shipping === 0 ? "Free" : `₹${shipping}`;
-  document.getElementById("totalAmount").textContent = `₹${total}`;
+    document.getElementById("subtotalAmount").textContent = `₹${subtotal.toFixed(2)}`;
+    document.getElementById("discountAmount").textContent = `-₹${discount.toFixed(2)}`;
+    document.getElementById("totalAmount").textContent = `₹${total.toFixed(2)}`;
 });
 </script>
 
