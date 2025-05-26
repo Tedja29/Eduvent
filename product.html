@@ -108,9 +108,10 @@
             <!-- Product Pricing -->
             <div class="product-price">
                 <span>48$</span>
-                <a href="./Payment.html" class="cart-btn">Payment Now</a>
+               <!-- Tombol checkout langsung -->
+                <a href="Payment.html" class="cart-btn" onclick="checkoutLangsung()">Payment Now</a>
+                <!-- Tombol tambah ke keranjang -->
                 <button onclick="tambahKeKeranjang()">Tambah ke Keranjang</button>
-                <a href="cart.html">Lihat Keranjang</a>
 
                 <!-- Tombol -->
             </div>
@@ -123,29 +124,35 @@
     <script src="./js/product.js"></script>
 
     <script>
-function tambahKeKeranjang() {
   const produk = {
-  nama: "Engineering Mathematics-1",
-  penulis: "N. D. Bhatt",
-  harga: 48,
-  gambar: "./image/book-1.png",
-  jumlah: 1
-};
-
+    nama: "Engineering Mathematics-1",
+    penulis: "N. D. Bhatt",
+    harga: 48,
+    gambar: "./image/book-1.png",
+    jumlah: 1
   };
 
-  // Ambil isi keranjang yang sudah ada
-  let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+  function checkoutLangsung() {
+    // Hapus keranjang lama, isi dengan 1 produk
+    localStorage.setItem("cartItems", JSON.stringify([produk]));
+  }
 
-  // Tambahkan produk ke array
-  cart.push(produk);
+  function tambahKeKeranjang() {
+    let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-  // Simpan kembali ke localStorage
-  localStorage.setItem("cartItems", JSON.stringify(cart));
+    // Cek apakah produk sudah ada
+    const existing = cart.find(p => p.nama === produk.nama);
+    if (existing) {
+      existing.jumlah += 1;
+    } else {
+      cart.push(produk);
+    }
 
-  alert("Produk ditambahkan ke keranjang!");
-}
+    localStorage.setItem("cartItems", JSON.stringify(cart));
+    alert("Produk ditambahkan ke keranjang!");
+  }
 </script>
+
 </body>
 
 </html>
