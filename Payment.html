@@ -220,20 +220,77 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("subtotalAmount").textContent = `₹${subtotal.toFixed(2)}`;
   document.getElementById("discountAmount").textContent = `-₹${discount.toFixed(2)}`;
   document.getElementById("totalAmount").textContent = `₹${total.toFixed(2)}`;
-});
-
-        paymentForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  // Validasi form dan kirim data ke Firebase...
-
-  // Setelah sukses:
-  localStorage.removeItem("cartItems");
-  alert("Pembayaran berhasil!");
-  window.location.href = "index.html";
-});
-
+});   
 </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+            authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+            databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "peppy-nation-438101-b2",
+            storageBucket: "peppy-nation-438101-b2.appspot.com",
+            messagingSenderId: "1086158601671",
+            appId: "1:1086158601671:web:6d2358e5a628376456ede2",
+            measurementId: "G-6RP0MHRXRX"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        document.getElementById("payment-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    alert("Silakan login terlebih dahulu.");
+                    return;
+                }
+
+                const uid = user.uid;
+                const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+                const subtotal = cart.reduce((sum, item) => sum + item.harga * (item.jumlah || 1), 0);
+                const discount = subtotal * 0.75;
+                const total = subtotal - discount;
+
+                const orderData = {
+                    userId: uid,
+                    items: cart,
+                    shipping: {
+                        fullname: document.getElementById("fullname").value,
+                        email: document.getElementById("email").value,
+                        phone: document.getElementById("phone").value,
+                        address: document.getElementById("address").value,
+                        city: document.getElementById("city").value,
+                        state: document.getElementById("state").value,
+                        zip: document.getElementById("zip").value
+                    },
+                    paymentMethod: document.getElementById("payment-method").value,
+                    status: "Sudah Dibayar",
+                    total: total,
+                    tanggal: new Date().toISOString()
+                };
+
+      const orderRef = ref(db, "checkout");
+      const newOrder = push(orderRef);
+
+      set(newOrder, orderData)
+        .then(() => {
+          localStorage.removeItem("cartItems");
+          alert("Pembayaran berhasil dan disimpan ke Firebase!");
+          window.location.href = "index.html";
+        })
+        .catch((err) => {
+          console.error("Gagal menyimpan ke Firebase:", err);
+          alert("Gagal menyimpan data pembayaran.");
+        });
+    });
+  });
+</script>
+
 
 </body>
 
