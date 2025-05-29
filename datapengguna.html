@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola Pengguna | Admin EduVent</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    header {
+      background-color: #28a745;
+      padding: 1rem;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 0.8rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: #e9ecef;
+    }
+
+    .actions button {
+      margin-right: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Kelola Pengguna</h1>
+    <p>Admin dapat melihat, menambah, mengedit, dan menghapus data pengguna</p>
+  </header>
+
+  <div class="container">
+    <h2>Daftar Pengguna</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Role</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="userTable">
+        <!-- Data pengguna akan ditampilkan di sini -->
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+      authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+      databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "peppy-nation-438101-b2",
+      storageBucket: "peppy-nation-438101-b2.appspot.com",
+      messagingSenderId: "1086158601671",
+      appId: "1:1086158601671:web:6d2358e5a628376456ede2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+
+    const userTable = document.getElementById("userTable");
+    const userRef = ref(database, "users");
+
+    onValue(userRef, (snapshot) => {
+      userTable.innerHTML = "";
+      snapshot.forEach(childSnapshot => {
+        const user = childSnapshot.val();
+        const uid = childSnapshot.key;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${user.firstName} ${user.lastName}</td>
+          <td>${user.email}</td>
+          <td>${user.username}</td>
+          <td>${user.role}</td>
+          <td class="actions">
+            <button class="edit-btn" onclick="alert('Edit fitur coming soon')">Edit</button>
+            <button class="delete-btn" onclick="deleteUser('${uid}')">Hapus</button>
+          </td>
+        `;
+        userTable.appendChild(tr);
+      });
+    });
+
+    window.deleteUser = function(uid) {
+      if (confirm("Apakah Anda yakin ingin menghapus pengguna ini?")) {
+        remove(ref(database, "users/" + uid));
+      }
+    }
+  </script>
+</body>
+</html>
