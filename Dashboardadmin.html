@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin | EduVent</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: #28a745;
+      padding: 1rem;
+      color: white;
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .dashboard {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+    }
+
+    .card {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      margin-bottom: 1rem;
+      color: #666;
+    }
+
+    .btn {
+      background-color: #28a745;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #e9ecef;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container">
+      <h1 class="logo">EduVent</h1>
+      <nav>
+        <a href="#">Beranda</a>
+        <a href="#">Manajemen</a>
+        <a href="#">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <h2>Dashboard Admin</h2>
+    <p>Selamat datang di area admin EduVent</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Data Pengguna</h3>
+        <p>Kelola pendaftaran pengguna baru dan data mereka.</p>
+        <a href="#" class="btn">Kelola Pengguna</a>
+      </div>
+
+      <div class="card">
+        <h3>Buku Dijual</h3>
+        <p>Periksa, setujui, atau hapus buku yang dijual pengguna.</p>
+        <a href="#" class="btn">Kelola Buku</a>
+      </div>
+
+      <div class="card">
+        <h3>Event Edukasi</h3>
+        <p>Buat, ubah, dan hapus event edukatif yang tersedia.</p>
+        <a href="#" class="btn">Atur Event</a>
+      </div>
+
+      <div class="card">
+        <h3>Transaksi</h3>
+        <p>Pantau transaksi pembayaran buku dan event.</p>
+        <a href="#" class="btn">Lihat Transaksi</a>
+      </div>
+
+      <div class="card">
+        <h3>Laporan Aktivitas</h3>
+        <p>Lihat aktivitas pengguna di platform EduVent.</p>
+        <a href="#" class="btn">Lihat Laporan</a>
+      </div>
+
+      <div class="card">
+        <h3>Statistik</h3>
+        <p>Analisa statistik penjualan dan pendaftaran event.</p>
+        <a href="#" class="btn">Lihat Statistik</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 EduVent. All rights reserved.</p>
+  </footer>
+</body>
+</html>
