@@ -1,65 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Promo Buku Eduvent</title>
-  <link rel="stylesheet" href="style.css" />
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <!-- Gaya CSS -->
+  <style>
+    /* Global Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: #222;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .book-card {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .book-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .book-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .event-info {
+      padding: 1rem;
+    }
+
+    .event-info .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background-color: #28a745;
+      color: #fff;
+      font-size: 0.75rem;
+      border-radius: 50px;
+      margin-bottom: 0.5rem;
+    }
+
+    .event-info h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .event-info p {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+
+    .register-btn,
+    .add-book-btn {
+      display: inline-block;
+      background-color: #28a745;
+      color: white;
+      padding: 10px 18px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+
+    .register-btn:hover,
+    .add-book-btn:hover {
+      background-color: #218838;
+    }
+
+    .add-book-container {
+      text-align: right;
+      margin-bottom: 1.5rem;
+    }
+  </style>
 </head>
+
 <body>
   <section class="upcoming-events">
     <div class="container">
       <h2 class="section-title">Buku Teknik dan Sains</h2>
-      <div class="event-grid"></div>
+
+      <!-- Tombol Tambah Buku -->
+      <div class="add-book-container">
+        <a href="addbook.html" class="add-book-btn">+ Tambah Buku</a>
+      </div>
+
+      <!-- Tempat buku ditampilkan -->
+      <div class="event-grid" id="bookGrid">
+        <p>Loading data buku...</p>
+      </div>
     </div>
   </section>
 
-  <!-- Firebase Config & Logic -->
   <script>
-    // GANTI dengan konfigurasi proyek Firebase kamu
+    // Firebase Config
     const firebaseConfig = {
-        apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
-        authDomain: "peppy-nation-438101-b2.firebaseapp.com",
-        databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "peppy-nation-438101-b2",
-        storageBucket: "peppy-nation-438101-b2.firebasestorage.app",
-        messagingSenderId: "1086158601671",
-        appId: "1:1086158601671:web:6d2358e5a628376456ede2",
+      apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+      authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+      databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "peppy-nation-438101-b2",
+      storageBucket: "peppy-nation-438101-b2.appspot.com",
+      messagingSenderId: "1086158601671",
+      appId: "1:1086158601671:web:6d2358e5a628376456ede2",
     };
 
     // Inisialisasi Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Ambil data dari node 'books' dan render ke halaman
-    const grid = document.querySelector(".event-grid");
+    const grid = document.getElementById("bookGrid");
 
     db.ref("books").once("value")
       .then(snapshot => {
-        grid.innerHTML = ""; // Kosongkan grid
-        snapshot.forEach(childSnapshot => {
-          const book = childSnapshot.val();
+        grid.innerHTML = ""; // Kosongkan dulu
+        if (!snapshot.exists()) {
+          grid.innerHTML = "<p style='color:gray'>Belum ada buku tersedia.</p>";
+          return;
+        }
+
+        snapshot.forEach(child => {
+          const book = child.val();
 
           const card = document.createElement("div");
-          card.className = "event-card book-card";
+          card.className = "book-card";
           card.innerHTML = `
             <img src="${book.image}" alt="${book.title}">
             <div class="event-info">
-              <span class="badge business">${book.category}</span>
+              <span class="badge">${book.category}</span>
               <h3>${book.title}</h3>
               <p>${book.description}</p>
-              <a href="${book.link}" class="register-btn">Check Book</a>
+              <a href="${book.link || '#'}" class="register-btn" target="_blank">Lihat Buku</a>
             </div>
           `;
           grid.appendChild(card);
         });
       })
       .catch(error => {
-        console.error("Gagal memuat data dari Firebase:", error);
-        grid.innerHTML = "<p style='color:red'>Gagal memuat buku.</p>";
+        console.error("Gagal ambil data dari Firebase:", error);
+        grid.innerHTML = "<p style='color:red'>Gagal memuat data buku.</p>";
       });
   </script>
 </body>
