@@ -157,29 +157,33 @@
 
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
+  
+  const bookGrid = document.getElementById("bookGrid");
+  database.ref("books").on("value", function(snapshot) {
+    bookGrid.innerHTML = "";
+    document.getElementById("loading").style.display = "none"; 
 
-    const bookListDiv = document.getElementById("bookList");
+    snapshot.forEach(function(childSnapshot) {
+    const book = childSnapshot.val();
 
-    database.ref("books").on("value", function(snapshot) {
-      bookListDiv.innerHTML = ""; // Bersihkan isi sebelumnya
-      snapshot.forEach(function(childSnapshot) {
-        const book = childSnapshot.val();
+    const card = document.createElement("div");
+    card.className = "book-card";
 
-        const card = document.createElement("div");
-        card.className = "book-card";
+    card.innerHTML = `
+      <img src="${book.image}" alt="${book.title}">
+      <div class="event-info">
+        <span class="badge">${book.category}</span>
+        <h3>${book.title}</h3>
+        <p>${book.description}</p>
+        <p><strong>Harga:</strong> Rp${parseInt(book.price).toLocaleString()}</p>
+        <a href="${book.link}" class="register-btn" target="_blank">Lihat Detail</a>
+      </div>
+    `;
 
-        card.innerHTML = `
-          <img src="${book.image}" alt="${book.title}">
-          <h3>${book.title}</h3>
-          <p><strong>Penulis:</strong> ${book.author}</p>
-          <p><strong>Kategori:</strong> ${book.category}</p>
-          <p><strong>Harga:</strong> Rp${book.price.toLocaleString()}</p>
-          <p><a href="${book.link}" target="_blank">Lihat Detail</a></p>
-        `;
+    bookGrid.appendChild(card);
+  });
+});
 
-        bookListDiv.appendChild(card);
-      });
-    });
   </script>
 </body>
 </html>
