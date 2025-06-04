@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Moderasi Buku</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .book-card {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .book-card img {
+      max-width: 120px;
+      height: auto;
+      float: right;
+      margin-left: 20px;
+    }
+
+    .book-card h3 {
+      margin: 0;
+      color: #2980b9;
+    }
+
+    .book-card p {
+      margin: 5px 0;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      margin-right: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .approve { background-color: #2ecc71; color: white; }
+    .reject { background-color: #e67e22; color: white; }
+    .delete { background-color: #e74c3c; color: white; }
+  </style>
+</head>
+<body>
+
+<h2>Moderasi Buku (Admin)</h2>
+<div id="bookList"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+    authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+    databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "peppy-nation-438101-b2",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const bookList = document.getElementById("bookList");
+
+  db.ref("books").orderByChild("status").equalTo("pending").on("value", function(snapshot) {
+    bookList.innerHTML = "";
+    snapshot.forEach(function(child) {
+      const book = child.val();
+      const key = child.key;
+
+      const card = document.createElement("div");
+      card.className = "book-card";
+
+      card.innerHTML = `
+        <img src="${book.image}" alt="${book.title}">
+        <h3>${book.title}</h3>
+        <p><strong>Penulis:</strong> ${book.author}</p>
+        <p><strong>Kategori:</strong> ${book.category}</p>
+        <p><strong>Harga:</strong> Rp${parseInt(book.price).toLocaleString()}</p>
+        <p>${book.description}</p>
+        <button class="btn approve" onclick="approveBook('${key}')">Setujui</button>
+        <button class="btn reject" onclick="rejectBook('${key}')">Tolak</button>
+        <button class="btn delete" onclick="deleteBook('${key}')">Hapus</button>
+      `;
+
+      bookList.appendChild(card);
+    });
+  });
+
+  function approveBook(id) {
+    firebase.database().ref("books/" + id).update({ status: "approved" });
+    alert("✅ Buku disetujui!");
+  }
+
+  function rejectBook(id) {
+    firebase.database().ref("books/" + id).update({ status: "rejected" });
+    alert("⚠️ Buku ditolak.");
+  }
+
+  function deleteBook(id) {
+    if (confirm("Yakin ingin menghapus buku ini?")) {
+      firebase.database().ref("books/" + id).remove();
+      alert("❌ Buku dihapus.");
+    }
+  }
+</script>
+
+</body>
+</html>
