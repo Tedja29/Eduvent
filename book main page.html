@@ -508,6 +508,52 @@
         </div>
     </section>
 
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+    authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+    databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "peppy-nation-438101-b2",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const dynamicSection = document.createElement("section");
+  dynamicSection.className = "event-section";
+  dynamicSection.innerHTML = `
+    <h2 class="section-title"><span>Buku Terbaru</span></h2>
+    <div class="event-grid" id="dynamicBooks"></div>
+  `;
+  document.body.appendChild(dynamicSection);
+
+  const dynamicBooksContainer = document.getElementById("dynamicBooks");
+
+  db.ref("books").limitToLast(6).on("value", function(snapshot) {
+    dynamicBooksContainer.innerHTML = "";
+    snapshot.forEach(function(childSnapshot) {
+      const book = childSnapshot.val();
+      const card = document.createElement("div");
+      card.className = "event-card book-card";
+      card.innerHTML = `
+        <img src="${book.image}" alt="${book.title}">
+        <div class="event-info">
+          <span class="badge business">${book.category}</span>
+          <h3>${book.title}</h3>
+          <p>${book.description}</p>
+          <a href="${book.link}" class="register-btn">Check Book</a>
+        </div>
+      `;
+      dynamicBooksContainer.appendChild(card);
+    });
+  });
+</script>
+
+
 </body>
 
 </html>
