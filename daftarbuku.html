@@ -1,42 +1,53 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daftar Bukuku - Penjual</title>
+  <title>Produk Buku Eduvent</title>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
+  <!-- Gaya CSS -->
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f9f9f9;
+    * {
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    h2 {
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: #222;
+      margin-bottom: 1.5rem;
       text-align: center;
-      color: #2c3e50;
     }
 
-    #bookGrid {
+    .event-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
     .book-card {
       background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       overflow: hidden;
-      transition: transform 0.3s;
+      transition: transform 0.2s ease;
     }
 
     .book-card:hover {
@@ -45,199 +56,134 @@
 
     .book-card img {
       width: 100%;
-      height: 200px;
+      height: 220px;
       object-fit: cover;
     }
 
-    .book-info {
-      padding: 15px;
+    .event-info {
+      padding: 1rem;
     }
 
-    .book-info h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      color: #333;
-    }
-
-    .book-info p {
-      margin: 5px 0;
-      font-size: 14px;
-      color: #666;
-    }
-
-    .status {
-      font-weight: bold;
-      padding: 6px 10px;
-      border-radius: 6px;
+    .event-info .badge {
       display: inline-block;
-      font-size: 13px;
+      padding: 4px 12px;
+      background-color: #28a745;
+      color: #fff;
+      font-size: 0.75rem;
+      border-radius: 50px;
+      margin-bottom: 0.5rem;
     }
 
-    .approved { background-color: #2ecc71; color: white; }
-    .pending { background-color: #f39c12; color: white; }
-    .rejected { background-color: #e74c3c; color: white; }
-
-    .btn {
-      margin-top: 10px;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 13px;
-      cursor: pointer;
+    .event-info h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
     }
 
-    .edit { background-color: #3498db; color: white; margin-right: 8px; }
-    .delete { background-color: #e74c3c; color: white; }
-
-    #editModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
+    .event-info p {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: #555;
+      max-height: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .modal-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 400px;
-      width: 100%;
-    }
-
-    .modal-content input, .modal-content textarea {
-      width: 100%;
-      padding: 8px;
-      margin: 6px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .modal-content button {
-      width: 100%;
-      background: #2ecc71;
+    .register-btn,
+    .add-book-btn {
+      display: inline-block;
+      background-color: #28a745;
       color: white;
-      border: none;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 10px 18px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.3s;
     }
 
-    .close-btn {
-      float: right;
-      font-weight: bold;
-      cursor: pointer;
+    .register-btn:hover,
+    .add-book-btn:hover {
+      background-color: #218838;
+    }
+
+    .add-book-container {
+      text-align: right;
+      margin-bottom: 1.5rem;
+    }
+
+    #loading {
+      text-align: center;
+      font-style: italic;
+      color: gray;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .event-info h3 {
+        font-size: 1rem;
+      }
+
+      .register-btn {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
+
 <body>
+  <section class="upcoming-events">
+    <div class="container">
+      <h2 class="section-title">Buku Teknik dan Sains</h2>
 
-<h2>Daftar Buku Saya</h2>
-<div id="bookGrid"></div>
+      <!-- Tombol Tambah Buku -->
+      <div class="add-book-container">
+        <a href="AddBook.html" class="add-book-btn">+ Tambah Buku</a>
+      </div>
 
-<!-- Modal Edit -->
-<div id="editModal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">X</span>
-    <h3>Edit Buku</h3>
-    <input type="text" id="editTitle" placeholder="Judul Buku" required>
-    <input type="text" id="editCategory" placeholder="Kategori" required>
-    <input type="number" id="editPrice" placeholder="Harga" required>
-    <textarea id="editDescription" placeholder="Deskripsi" required></textarea>
-    <input type="url" id="editImage" placeholder="URL Gambar" required>
-    <button onclick="saveChanges()">Simpan Perubahan</button>
-  </div>
-</div>
+      <!-- Loading Spinner -->
+      <div id="loading">Memuat data buku...</div>
 
+      <!-- Grid Buku -->
+      <div class="event-grid" id="bookGrid"></div>
+    </div>
+  </section>
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
-    authDomain: "peppy-nation-438101-b2.firebaseapp.com",
-    databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "peppy-nation-438101-b2"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-  let currentEditId = null;
-
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      const uid = user.uid;
-      db.ref("users/" + uid).once("value").then(function(snapshot) {
-        const userData = snapshot.val();
-        if (userData && userData.role === "penjual") {
-          db.ref("books").orderByChild("submittedBy").equalTo(uid).on("value", function(snapshot) {
-            const grid = document.getElementById("bookGrid");
-            grid.innerHTML = "";
-            snapshot.forEach(function(child) {
-              const book = child.val();
-              const card = document.createElement("div");
-              card.className = "book-card";
-              card.innerHTML = `
-                <img src="${book.image}" alt="${book.title}">
-                <div class="book-info">
-                  <h3>${book.title}</h3>
-                  <p><strong>Kategori:</strong> ${book.category}</p>
-                  <p><strong>Harga:</strong> Rp${parseInt(book.price).toLocaleString()}</p>
-                  <p><strong>Status:</strong> <span class="status ${book.status}">${book.status}</span></p>
-                  <button class="btn edit" onclick="editBook('${child.key}', ${JSON.stringify(book).replace(/"/g, '&quot;')})">Edit</button>
-                  <button class="btn delete" onclick="deleteBook('${child.key}')">Hapus</button>
-                </div>
-              `;
-              grid.appendChild(card);
-            });
-          });
-        } else {
-          alert("Akses ditolak. Halaman ini hanya untuk penjual.");
-          window.location.href = "index.html";
-        }
-      });
-    } else {
-      alert("Silakan login terlebih dahulu.");
-      window.location.href = "login.html";
-    }
-  });
-
-  function editBook(id, data) {
-    currentEditId = id;
-    document.getElementById("editTitle").value = data.title;
-    document.getElementById("editCategory").value = data.category;
-    document.getElementById("editPrice").value = data.price;
-    document.getElementById("editDescription").value = data.description;
-    document.getElementById("editImage").value = data.image;
-    document.getElementById("editModal").style.display = "flex";
-  }
-
-  function closeModal() {
-    document.getElementById("editModal").style.display = "none";
-  }
-
-  function saveChanges() {
-    const updatedData = {
-      title: document.getElementById("editTitle").value,
-      category: document.getElementById("editCategory").value,
-      price: parseFloat(document.getElementById("editPrice").value),
-      description: document.getElementById("editDescription").value,
-      image: document.getElementById("editImage").value
+    const firebaseConfig = {
+      apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+      authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+      databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "peppy-nation-438101-b2",
     };
 
-    firebase.database().ref("books/" + currentEditId).update(updatedData).then(() => {
-      alert("Buku berhasil diperbarui.");
-      closeModal();
-    });
-  }
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+  
+  const bookGrid = document.getElementById("bookGrid");
+  database.ref("books").on("value", function(snapshot) {
+    bookGrid.innerHTML = "";
+    document.getElementById("loading").style.display = "none"; 
 
-  function deleteBook(id) {
-    if (confirm("Yakin ingin menghapus buku ini?")) {
-      firebase.database().ref("books/" + id).remove().then(() => {
-        alert("Buku berhasil dihapus.");
-      });
-    }
-  }
-</script>
+    snapshot.forEach(function(childSnapshot) {
+    const book = childSnapshot.val();
 
+    const card = document.createElement("div");
+    card.className = "book-card";
+
+    card.innerHTML = `
+      <img src="${book.image}" alt="${book.title}">
+      <div class="event-info">
+        <span class="badge">${book.category}</span>
+        <h3>${book.title}</h3>
+        <p>${book.description}</p>
+        <p><strong>Harga:</strong> Rp${parseInt(book.price).toLocaleString()}</p>
+        <a href="${book.link}" class="register-btn" target="_blank">Lihat Detail</a>
+      </div>
+    `;
+
+    bookGrid.appendChild(card);
+  });
+});
+
+  </script>
 </body>
 </html>
