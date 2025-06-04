@@ -4,71 +4,71 @@
   <meta charset="UTF-8">
   <title>Tambah Buku</title>
   <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f7f9fc;
-    color: #333;
-    padding: 20px;
-    margin: 0;
-  }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f7f9fc;
+      color: #333;
+      padding: 20px;
+      margin: 0;
+    }
 
-  h2 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 30px;
-  }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
 
-  form {
-    max-width: 500px;
-    margin: auto;
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  }
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
 
-  input[type="text"],
-  input[type="number"],
-  input[type="url"],
-  textarea {
-    width: 100%;
-    padding: 10px 15px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: 0.3s;
-  }
+    input[type="text"],
+    input[type="number"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
 
-  input:focus,
-  textarea:focus {
-    border-color: #2980b9;
-    outline: none;
-  }
+    input:focus,
+    textarea:focus {
+      border-color: #2980b9;
+      outline: none;
+    }
 
-  button {
-    background-color: #2980b9;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    width: 100%;
-    margin-top: 10px;
-    transition: background 0.3s;
-  }
+    button {
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
 
-  button:hover {
-    background-color: #3498db;
-  }
+    button:hover {
+      background-color: #3498db;
+    }
 
-  #message {
-    text-align: center;
-    margin-top: 20px;
-    font-weight: bold;
-  }
-</style>
+    #message {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <h2>Form Tambah Buku</h2>
@@ -86,6 +86,7 @@
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
   <script>
@@ -97,12 +98,13 @@
     };
 
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const database = firebase.database();
 
     const addBookForm = document.getElementById("addBookForm");
     const messageDiv = document.getElementById("message");
 
-    addBookForm.addEventListener("submit", async function (e) {
+    addBookForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const title = document.getElementById("title").value.trim();
@@ -117,27 +119,36 @@
         return;
       }
 
-      try {
-        const newBookRef = database.ref("books").push();
-        await newBookRef.set({
-          title,
-          author,
-          category,
-          description,
-          price,
-          image,
-          link: "product.html"
-        });
+      auth.onAuthStateChanged(async function(user) {
+        if (user) {
+          const submittedBy = user.uid;
 
-        messageDiv.innerText = "✅ Buku berhasil ditambahkan. Mengarahkan...";
-        setTimeout(() => {
-          window.location.href = "daftarbuku.html";
-        }, 2000);
+          try {
+            const newBookRef = database.ref("books").push();
+            await newBookRef.set({
+              title,
+              author,
+              category,
+              description,
+              price,
+              image,
+              link: "product.html",
+              status: "pending",
+              submittedBy: submittedBy
+            });
 
-      } catch (error) {
-        console.error(error);
-        messageDiv.innerText = "❌ Gagal menambahkan buku: " + error.message;
-      }
+            messageDiv.innerText = "✅ Buku berhasil ditambahkan. Mengarahkan...";
+            setTimeout(() => {
+              window.location.href = "daftarbuku.html";
+            }, 2000);
+          } catch (error) {
+            console.error(error);
+            messageDiv.innerText = "❌ Gagal menambahkan buku: " + error.message;
+          }
+        } else {
+          messageDiv.innerText = "❌ Anda harus login terlebih dahulu.";
+        }
+      });
     });
   </script>
 </body>
