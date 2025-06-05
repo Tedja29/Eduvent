@@ -306,6 +306,47 @@
         </div>
 
     </section>
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+        authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+        databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "peppy-nation-438101-b2",
+        storageBucket: "peppy-nation-438101-b2.firebasestorage.app",
+        messagingSenderId: "1086158601671",
+        appId: "1:1086158601671:web:6d2358e5a628376456ede2"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+</script>
+
+<!-- JavaScript untuk ambil data dari Firebase -->
+<script>
+    const eventGrid = document.getElementById("eventGrid");
+
+    db.ref("events").once("value", function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+            const event = childSnapshot.val();
+
+            const card = document.createElement("div");
+            card.className = "event-card";
+            card.innerHTML = `
+                <img src="${event.image}" alt="Event Poster">
+                <div class="event-info">
+                    <span class="badge business">${event.category}</span>
+                    <h3>${event.title}</h3>
+                    <p>${event.description}</p>
+                    <a href="${event.registerUrl}" class="register-btn">Register</a>
+                </div>
+            `;
+            eventGrid.appendChild(card);
+        });
+    });
+</script>
 
 </body>
 
