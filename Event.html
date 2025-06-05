@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Manajemen Event Edukasi</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
+
+    const firebaseConfig = {
+      
+      apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
+      authDomain: "peppy-nation-438101-b2.firebaseapp.com",
+      databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "peppy-nation-438101-b2",
+      storageBucket: "peppy-nation-438101-b2.firebasestorage.app",
+      messagingSenderId: "1086158601671",
+      appId: "1:1086158601671:web:6d2358e5a628376456ede2",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const eventsRef = ref(db, "events");
+
+    const form = document.getElementById("eventForm");
+    const eventList = document.getElementById("eventList");
+
+    // Tambah atau Edit Event
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const newEvent = {
+        title: form.title.value,
+        description: form.description.value,
+        date: form.date.value,
+        location: form.location.value,
+        status: form.status.value,
+        posterUrl: form.posterUrl.value
+      };
+
+      if (form.dataset.editingId) {
+        const updateRef = ref(db, "events/" + form.dataset.editingId);
+        await update(updateRef, newEvent);
+        form.removeAttribute('data-editing-id');
+      } else {
+        await push(eventsRef, newEvent);
+      }
+
+      form.reset();
+    });
+
+    // Tampilkan daftar event
+    onValue(eventsRef, (snapshot) => {
+      eventList.innerHTML = "";
+      snapshot.forEach((child) => {
+        const id = child.key;
+        const e = child.val();
+
+        const div = document.createElement("div");
+        div.style = "border:1px solid #ccc; padding:10px; margin-bottom:10px;";
+        div.innerHTML = `
+          <h3>${e.title}</h3>
+          ${e.posterUrl ? `<img src="${e.posterUrl}" width="200" style="margin-bottom:10px;"/>` : ""}
+          <p>${e.description}</p>
+          <p><strong>Tanggal:</strong> ${e.date}</p>
+          <p><strong>Lokasi:</strong> ${e.location}</p>
+          <p><strong>Status:</strong> ${e.status}</p>
+          <button onclick="editEvent('${id}')">Edit</button>
+          <button onclick="deleteEvent('${id}')">Hapus</button>
+        `;
+        eventList.appendChild(div);
+      });
+    });
+
+    // Edit Event
+    window.editEvent = function (id) {
+      const eventRef = ref(db, "events/" + id);
+      onValue(eventRef, (snapshot) => {
+        const e = snapshot.val();
+        form.title.value = e.title;
+        form.description.value = e.description;
+        form.date.value = e.date;
+        form.location.value = e.location;
+        form.status.value = e.status;
+        form.posterUrl.value = e.posterUrl || "";
+        form.setAttribute("data-editing-id", id);
+      }, { onlyOnce: true });
+    }
+
+    // Hapus Event
+    window.deleteEvent = function (id) {
+      const confirmDelete = confirm("Yakin ingin menghapus event ini?");
+      if (confirmDelete) {
+        const eventRef = ref(db, "events/" + id);
+        remove(eventRef);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h2>Manajemen Event Edukasi</h2>
+
+  <form id="eventForm">
+    <input type="text" id="title" placeholder="Judul Event" required><br>
+    <textarea id="description" placeholder="Deskripsi" required></textarea><br>
+    <input type="date" id="date" required><br>
+    <input type="text" id="location" placeholder="Lokasi" required><br>
+    <select id="status" required>
+      <option value="aktif">Aktif</option>
+      <option value="nonaktif">Nonaktif</option>
+    </select><br>
+    <input type="url" id="posterUrl" placeholder="Link Gambar Poster (opsional)"><br>
+    <button type="submit">Simpan Event</button>
+  </form>
+
+  <hr>
+  <h3>Daftar Event:</h3>
+  <div id="eventList"></div>
+</body>
+</html>
