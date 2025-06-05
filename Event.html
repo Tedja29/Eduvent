@@ -1,19 +1,117 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Manajemen Event Edukasi</title>
+
+  <!-- CSS -->
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      padding: 30px;
+      color: #333;
+    }
+
+    h2, h3 {
+      color: #2a6f4c;
+    }
+
+    form {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button[type="submit"] {
+      background-color: #2a6f4c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1f5339;
+    }
+
+    #eventList {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    #eventList div {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      width: 300px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    #eventList img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    #eventList button {
+      margin-right: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #eventList button:hover {
+      opacity: 0.9;
+    }
+
+    #eventList button.edit {
+      background-color: #007bff;
+      color: white;
+    }
+
+    #eventList button.delete {
+      background-color: #dc3545;
+      color: white;
+    }
+  </style>
+
+  <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js";
 
     const firebaseConfig = {
-      
       apiKey: "AIzaSyDiwuveb5FRuMQmOG_A1Yoikr2uJ66Yn2A",
       authDomain: "peppy-nation-438101-b2.firebaseapp.com",
       databaseURL: "https://peppy-nation-438101-b2-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "peppy-nation-438101-b2",
-      storageBucket: "peppy-nation-438101-b2.firebasestorage.app",
+      storageBucket: "peppy-nation-438101-b2.appspot.com",
       messagingSenderId: "1086158601671",
       appId: "1:1086158601671:web:6d2358e5a628376456ede2",
     };
@@ -56,16 +154,15 @@
         const e = child.val();
 
         const div = document.createElement("div");
-        div.style = "border:1px solid #ccc; padding:10px; margin-bottom:10px;";
         div.innerHTML = `
           <h3>${e.title}</h3>
-          ${e.posterUrl ? `<img src="${e.posterUrl}" width="200" style="margin-bottom:10px;"/>` : ""}
+          ${e.posterUrl ? `<img src="${e.posterUrl}" alt="Poster Event"/>` : ""}
           <p>${e.description}</p>
           <p><strong>Tanggal:</strong> ${e.date}</p>
           <p><strong>Lokasi:</strong> ${e.location}</p>
           <p><strong>Status:</strong> ${e.status}</p>
-          <button onclick="editEvent('${id}')">Edit</button>
-          <button onclick="deleteEvent('${id}')">Hapus</button>
+          <button class="edit" onclick="editEvent('${id}')">Edit</button>
+          <button class="delete" onclick="deleteEvent('${id}')">Hapus</button>
         `;
         eventList.appendChild(div);
       });
@@ -83,19 +180,20 @@
         form.status.value = e.status;
         form.posterUrl.value = e.posterUrl || "";
         form.setAttribute("data-editing-id", id);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }, { onlyOnce: true });
-    }
+    };
 
     // Hapus Event
     window.deleteEvent = function (id) {
-      const confirmDelete = confirm("Yakin ingin menghapus event ini?");
-      if (confirmDelete) {
+      if (confirm("Yakin ingin menghapus event ini?")) {
         const eventRef = ref(db, "events/" + id);
         remove(eventRef);
       }
-    }
+    };
   </script>
 </head>
+
 <body>
   <h2>Manajemen Event Edukasi</h2>
 
